@@ -1,5 +1,7 @@
 package com.example.gestiondepedidoshibernate.controllers;
 
+import com.example.gestiondepedidoshibernate.Main;
+import com.example.gestiondepedidoshibernate.Session;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -20,7 +22,12 @@ public class LoginController implements Serializable {
     @FXML
     private Button btnLogin;
 
+    //TODO tocar el login para que funcione bien
     @FXML
     public void login(ActionEvent actionEvent) {
+        String user = txtUser.getText();
+        String password = txtPassword.getText();
+
+        Main.loadMain("ventana-principal.fxml");
     }
 }
