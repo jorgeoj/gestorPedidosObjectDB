@@ -12,7 +12,6 @@ public class Main extends Application {
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("ventana-login.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 700, 500);
-        stage.setResizable(false);
         stage.setTitle("Login");
         stage.setScene(scene);
         stage.show();

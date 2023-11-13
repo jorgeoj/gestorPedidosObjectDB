@@ -3,7 +3,7 @@ package com.example.gestiondepedidoshibernate.domain;
 import lombok.extern.java.Log;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-
+/*
 @Log
 public class HibernateUtil {
     private static SessionFactory sf = null;
@@ -17,9 +17,13 @@ public class HibernateUtil {
         } catch(Exception ex){
             log.severe("Error al crear SessionFactory()");
         }
+
     }
 
     public static SessionFactory getSessionFactory(){
         return sf;
     }
+
+
 }
+*/
