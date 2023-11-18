@@ -2,12 +2,12 @@ package com.example.gestiondepedidoshibernate.controllers;
 
 import com.example.gestiondepedidoshibernate.Main;
 import com.example.gestiondepedidoshibernate.Session;
+import com.example.gestiondepedidoshibernate.domain.user.User;
+import com.example.gestiondepedidoshibernate.domain.user.UserDAOImp;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.event.ActionEvent;
+import javafx.scene.paint.Color;
 
 import java.io.Serializable;
 
@@ -22,12 +22,23 @@ public class LoginController implements Serializable {
     @FXML
     private Button btnLogin;
 
-    //TODO tocar el login para que funcione bien
     @FXML
     public void login(ActionEvent actionEvent) {
         String user = txtUser.getText();
         String password = txtPassword.getText();
+        User usuario = (new UserDAOImp()).validateUser(user, password);
 
-        Main.loadMain("ventana-principal.fxml");
+        if (usuario == null){
+            info.setText("Datos no validos");
+            info.setTextFill(Color.RED);
+        }else {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Hola!");
+            alert.setHeaderText("Inicio correcto");
+            alert.setContentText("Bienvenid@, " + usuario.getNombre() + ".");
+            alert.showAndWait();
+            Session.setCurrentUser(usuario);
+            Main.loadMain("ventana-principal.fxml");
+        }
     }
 }

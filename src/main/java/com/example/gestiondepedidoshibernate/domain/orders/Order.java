@@ -1,22 +1,37 @@
 package com.example.gestiondepedidoshibernate.domain.orders;
 
 import com.example.gestiondepedidoshibernate.domain.items.Item;
-import lombok.AllArgsConstructor;
+import com.example.gestiondepedidoshibernate.domain.user.User;
+import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Entity
+@Table(name = "pedido")
 public class Order implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(name = "codigo")
     private String codigo;
+
+    @Column(name = "fecha")
     private String fecha;
-    private Long usuarioId;
-    private Long total;
+
+    @ManyToOne
+    @JoinColumn(name = "usuario", referencedColumnName = "id")
+    private User usuarioId;
+
+    @Column(name = "total")
+    private Double total;
+
+    @OneToMany(mappedBy = "codigo", fetch = FetchType.EAGER)
     private ArrayList<Item> items = new ArrayList<>();
 }

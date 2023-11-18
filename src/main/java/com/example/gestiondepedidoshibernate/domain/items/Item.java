@@ -1,19 +1,32 @@
 package com.example.gestiondepedidoshibernate.domain.items;
 
+import com.example.gestiondepedidoshibernate.domain.orders.Order;
 import com.example.gestiondepedidoshibernate.domain.products.Product;
-import lombok.AllArgsConstructor;
+import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+
 
 import java.io.Serializable;
 
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
+@Entity
+@Table(name = "item")
 public class Item implements Serializable {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    private String codigo_pedido;
+
+    @ManyToOne
+    @JoinColumn(name = "codigo_pedido", referencedColumnName = "codigo_pedido")
+    private Order codigo_pedido;
+
+    @OneToOne
+    @JoinColumn(name = "producto_id")
     private Product producto_id;
+
+    @Column(name = "cantidad")
     private Integer cantidad;
+
+
 }

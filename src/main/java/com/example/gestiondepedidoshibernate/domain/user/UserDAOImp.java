@@ -11,20 +11,16 @@ public class UserDAOImp implements DAO<User> {
     @Override
     public ArrayList<User> getAll() {
         var salida = new ArrayList<User>(0);
-
-        //TODO: mirar porque User da error ahi
-        try(Session s = HibernateUtil.getSessionFactory().openSession()){
-            Query<User> q = s.createQuery("from User", User.class);
-            salida = (ArrayList<User>) q.getResultList();
+        try(Session sesion = HibernateUtil.getSessionFactory().openSession()){
+            Query<User> query = sesion.createQuery("from User", User.class);
+            salida = (ArrayList<User>) query.getResultList();
         }
-
-        return null;
+        return salida;
     }
 
     @Override
     public User get(Long id) {
         var salida = new User();
-
         try(Session s = HibernateUtil.getSessionFactory().openSession()){
             salida = s.get(User.class,id);
         }
@@ -38,12 +34,31 @@ public class UserDAOImp implements DAO<User> {
     }
 
     @Override
-    public void update(User data) {
-
-    }
+    public void update(User data) {}
 
     @Override
-    public void delete(User data) {
+    public void delete(User data) {}
 
+    public User validateUser(String username, String password){
+        //Desde un lambda no se puede escribir desde una variable externa.
+        User result = null;
+
+        //Si la sesión está dentro de un try con recursos se cierra sola.
+        try(Session session = HibernateUtil.getSessionFactory().openSession()){
+            //Se hacen consultas a la entidad (clase User) no a la tabla.
+            Query<User> query = session.createQuery("from User where email=:u and contrasenya=:p", User.class);
+
+            //Se refieren a los que entran por el método.
+            query.setParameter("u", username);
+            query.setParameter("p", password);
+            //
+
+            try {
+                result = query.getSingleResult();
+            } catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+        }
+        return result;
     }
 }
