@@ -44,7 +44,7 @@
                               <Insets bottom="20.0" left="20.0" right="20.0" />
                            </VBox.margin>
                         </TableView>
-                        <Button fx:id="btnNuevoPedido" mnemonicParsing="false" style="-fx-background-color: #0598ff;" text="Nuevo pedido" textFill="WHITE" />
+                        <Button fx:id="btnNuevoPedido" mnemonicParsing="false" onAction="#anyadirPedido" style="-fx-background-color: #0598ff;" text="Nuevo pedido" textFill="WHITE" />
                      </children>
                      <BorderPane.margin>
                         <Insets left="20.0" right="20.0" />

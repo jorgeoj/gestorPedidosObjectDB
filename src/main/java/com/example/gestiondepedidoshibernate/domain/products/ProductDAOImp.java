@@ -12,6 +12,7 @@ public class ProductDAOImp implements DAO<Product> {
     public ArrayList<Product> getAll() {
         var salida = new ArrayList<Product>(0);
         try(Session sesion = HibernateUtil.getSessionFactory().openSession()){
+            //TODO: Mirar que vuelve a dar error
             Query<Product> query = sesion.createQuery("from Product ", Product.class);
             salida = (ArrayList<Product>) query.getResultList();
         }

@@ -14,7 +14,7 @@
     <children>
       <HBox alignment="TOP_RIGHT">
          <children>
-            <Button fx:id="btnCerrarSesion" mnemonicParsing="false" style="-fx-background-color: #0598ff;" text="Cerrar sesión" textFill="WHITE">
+            <Button fx:id="btnCerrarSesion" mnemonicParsing="false" onAction="#logout" style="-fx-background-color: #0598ff;" text="Cerrar sesión" textFill="WHITE">
                <font>
                   <Font size="14.0" />
                </font>

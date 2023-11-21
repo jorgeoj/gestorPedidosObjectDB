@@ -9,7 +9,7 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 
-public class Session {
+public class Sesion {
 
     /**
      * Posición del pedido seleccionado en la tabla.

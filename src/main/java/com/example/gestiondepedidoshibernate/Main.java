@@ -54,6 +54,16 @@ public class Main extends Application {
         }
     }
 
+    public static void loadAnyadirProducto(String ruta) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(ruta));
+            Scene scene = new Scene(fxmlLoader.load(), 850, 600);
+            myStage.setScene(scene);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public static void main(String[] args) {
         launch();
     }

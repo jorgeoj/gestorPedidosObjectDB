@@ -14,6 +14,7 @@ public class OrderDAOImp implements DAO<Order> {
     public ArrayList<Order> getAll() {
         var salida = new ArrayList<Order>(0);
         try(Session sesion = HibernateUtil.getSessionFactory().openSession()){
+            //TODO: Mirar que vuelve a dar error
             Query<Order> query = sesion.createQuery("from Order", Order.class);
             salida = (ArrayList<Order>) query.getResultList();
         }

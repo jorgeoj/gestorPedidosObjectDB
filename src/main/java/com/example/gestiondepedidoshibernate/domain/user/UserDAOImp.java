@@ -12,6 +12,7 @@ public class UserDAOImp implements DAO<User> {
     public ArrayList<User> getAll() {
         var salida = new ArrayList<User>(0);
         try(Session sesion = HibernateUtil.getSessionFactory().openSession()){
+            //TODO: Mirar que vuelve a dar error
             Query<User> query = sesion.createQuery("from User", User.class);
             salida = (ArrayList<User>) query.getResultList();
         }
@@ -46,6 +47,7 @@ public class UserDAOImp implements DAO<User> {
         //Si la sesión está dentro de un try con recursos se cierra sola.
         try(Session session = HibernateUtil.getSessionFactory().openSession()){
             //Se hacen consultas a la entidad (clase User) no a la tabla.
+            //TODO: Mirar que vuelve a dar error
             Query<User> query = session.createQuery("from User where email=:u and contrasenya=:p", User.class);
 
             //Se refieren a los que entran por el método.
