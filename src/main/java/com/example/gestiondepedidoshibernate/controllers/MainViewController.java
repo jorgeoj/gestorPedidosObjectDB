@@ -8,15 +8,16 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
-import java.io.Serializable;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class MainViewController implements Serializable {
+public class MainViewController implements Initializable {
     @javafx.fxml.FXML
     private Button btnCerrarSesion;
     @javafx.fxml.FXML
@@ -33,8 +34,12 @@ public class MainViewController implements Serializable {
     private TableColumn<Order, String> colTotalPedido;
     @javafx.fxml.FXML
     private Button btnNuevoPedido;
+    @javafx.fxml.FXML
+    private Label lblTitulo;
 
-    private ObservableList<Order> pedidosObservable;
+    private ObservableList<Order> observableList;
+    private OrderDAOImp orderDAOImp = new OrderDAOImp();
+
 
     public MainViewController(){}
 
@@ -60,29 +65,14 @@ public class MainViewController implements Serializable {
             return new SimpleStringProperty(total);
         });
 
-        /*
-        this.pedidosObservable = FXCollections.observableArrayList();
-        OrderDAOImp pedidoDAOImp = new OrderDAOImp(DBConnection.getConnection());
-        Session.setCurrentorder(pedidoDAOImp.loadAll(Session.getCurrentUser().getId()));
-        this.pedidosObservable.addAll(Session.getPedidos());
-        this.tvPedidos.setItems(this.pedidosObservable);
-        this.tvPedidos.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) ->{
-            this.seleccionarPedido(this.tvPedidos.getSelectionModel().getSelectedItem());
-        });
-        */
-    }
+        observableList = FXCollections.observableArrayList();
 
-    /*
-    private void seleccionarPedido(Order order) {
-        Session.setCurrentorder(order);
-        Session.setPos(this.tvPedidos.getSelectionModel().getSelectedIndex());
-        Main.loadFXMLDetalles("ventana-pedido.fxml");
+
     }
-    */
 
     @javafx.fxml.FXML
     public void logout(ActionEvent actionEvent) {
-        Session.setCurrentUser(null);
+        Session.setUsuario(null);
         Main.loadLogin("ventana-login.fxml");
     }
 }

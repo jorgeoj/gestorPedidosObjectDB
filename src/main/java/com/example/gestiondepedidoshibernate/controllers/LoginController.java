@@ -5,13 +5,15 @@ import com.example.gestiondepedidoshibernate.Session;
 import com.example.gestiondepedidoshibernate.domain.user.User;
 import com.example.gestiondepedidoshibernate.domain.user.UserDAOImp;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.event.ActionEvent;
 import javafx.scene.paint.Color;
 
-import java.io.Serializable;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class LoginController implements Serializable {
+public class LoginController implements Initializable {
 
     @FXML
     private Label info;
@@ -21,6 +23,9 @@ public class LoginController implements Serializable {
     private TextField txtUser;
     @FXML
     private Button btnLogin;
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {}
 
     @FXML
     public void login(ActionEvent actionEvent) {
@@ -37,7 +42,7 @@ public class LoginController implements Serializable {
             alert.setHeaderText("Inicio correcto");
             alert.setContentText("Bienvenid@, " + usuario.getNombre() + ".");
             alert.showAndWait();
-            Session.setCurrentUser(usuario);
+            Session.setUsuario(usuario);
             Main.loadMain("ventana-principal.fxml");
         }
     }
