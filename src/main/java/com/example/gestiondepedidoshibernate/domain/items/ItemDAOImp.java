@@ -13,7 +13,6 @@ public class ItemDAOImp implements DAO<Item> {
     public ArrayList<Item> getAll() {
         var salida = new ArrayList<Item>(0);
         try(Session sesion = HibernateUtil.getSessionFactory().openSession()){
-            //TODO: Mirar que vuelve a dar error
             Query<Item> query = sesion.createQuery("from Item ", Item.class);
         }
         return salida;

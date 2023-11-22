@@ -125,8 +125,7 @@ public class MainViewController implements Initializable {
 
         try (Session sesion = HibernateUtil.getSessionFactory().openSession()) {
             // Obtener el último código de pedido
-            //TODO: Mirar como era esto porque da error
-            Query<String> query = sesion.createQuery("select max(o.codigo_pedido) from Order o", String.class);
+            Query<String> query = sesion.createQuery("select max(o.codigo) from Order o", String.class);
             String ultimoCodigoPedido = query.uniqueResult();
 
             // Incrementar el último código de pedido

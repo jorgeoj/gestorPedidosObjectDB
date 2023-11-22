@@ -27,6 +27,4 @@ public class Item implements Serializable {
 
     @Column(name = "cantidad")
     private Integer cantidad;
-
-
 }

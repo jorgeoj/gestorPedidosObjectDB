@@ -10,6 +10,7 @@ import javafx.scene.control.*;
 import javafx.event.ActionEvent;
 import javafx.scene.paint.Color;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -31,19 +32,21 @@ public class LoginController implements Initializable {
     public void login(ActionEvent actionEvent) {
         String user = txtUser.getText();
         String password = txtPassword.getText();
-        User usuario = (new UserDAOImp()).validateUser(user, password);
+        if (user.length() < 4 || password.length() < 4) {
+            info.setText("Introduce los datos");
+            info.setStyle("-fx-background-color:red; -fx-text-fill: white;");
 
-        if (usuario == null){
-            info.setText("Datos no validos");
-            info.setTextFill(Color.RED);
-        }else {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Hola!");
-            alert.setHeaderText("Inicio correcto");
-            alert.setContentText("Bienvenid@, " + usuario.getNombre() + ".");
-            alert.showAndWait();
-            Sesion.setUsuario(usuario);
-            Main.loadMain("ventana-principal.fxml");
+        } else {
+            User u = (new UserDAOImp()).validateUser(user, password);
+            Sesion.setUsuario(u);
+            if (u == null) {
+                info.setText("Usuario no encontrado");
+                info.setStyle("-fx-background-color:red; -fx-text-fill: white;");
+            } else {
+                info.setText("Usuario " + user + "(" + password + ") correcto");
+                info.setStyle("-fx-background-color:green; -fx-text-fill: white;");
+                Main.loadMain("ventana-principal.fxml");
+            }
         }
     }
 }
