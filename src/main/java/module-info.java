@@ -18,4 +18,6 @@ module com.example.gestiondepedidoshibernate {
 
     exports com.example.gestiondepedidoshibernate;
     exports com.example.gestiondepedidoshibernate.controllers;
+    exports com.example.gestiondepedidoshibernate.domain.user;
+    exports com.example.gestiondepedidoshibernate.domain.orders;
 }

@@ -16,6 +16,7 @@ public class HibernateUtil {
             log.info("SessionFactory creada con exito!");
         } catch(Exception ex){
             log.severe("Error al crear SessionFactory()");
+            System.out.println(ex.getMessage());
         }
 
     }
@@ -23,5 +24,4 @@ public class HibernateUtil {
     public static SessionFactory getSessionFactory(){
         return sf;
     }
-
 }

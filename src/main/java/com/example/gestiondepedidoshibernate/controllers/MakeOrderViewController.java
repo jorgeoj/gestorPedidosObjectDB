@@ -41,12 +41,13 @@ public class MakeOrderViewController implements Initializable {
 
     @javafx.fxml.FXML
     public void cerrarSesion(ActionEvent actionEvent) {
-        Sesion.setUsuario(null);
+        Sesion.setCurrentUser(null);
         Main.loadLogin("ventana-login.fxml");
     }
 
     @javafx.fxml.FXML
     public void aceptar(ActionEvent actionEvent) {
+        /*
         Order order = Sesion.getPedido();
         if (order != null) {
             Item item = new Item();
@@ -58,11 +59,12 @@ public class MakeOrderViewController implements Initializable {
             Sesion.setItem(item);
             Main.loadMain("ventana-principal.fxml");
         }
+        */
     }
 
     @javafx.fxml.FXML
     public void volver(ActionEvent actionEvent) {
-        Main.loadMain("ventana-principal.fxml");
+        Main.loadWindow("ventana-principal.fxml");
     }
 
 

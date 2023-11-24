@@ -32,6 +32,18 @@ public class Order implements Serializable {
     @Column(name = "total")
     private Double total;
 
-    @OneToMany(mappedBy = "codigo", fetch = FetchType.EAGER)
-    private ArrayList<Item> items = new ArrayList<>();
+    @OneToMany(mappedBy = "codigo_pedido", fetch = FetchType.EAGER)
+    private List<Item> items = new ArrayList<>();
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id=" + id +
+                ", codigo='" + codigo + '\'' +
+                ", fecha='" + fecha + '\'' +
+                ", usuarioId=" + usuarioId.getId() +
+                ", total=" + total +
+                ", items=" + items +
+                '}';
+    }
 }

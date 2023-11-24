@@ -63,9 +63,11 @@ public class OrderViewDetailsController implements Initializable {
 
         observableList = FXCollections.observableArrayList();
 
-        Sesion.setPedido((new OrderDAOImp()).get(Sesion.getPedido().getId()));
-        observableList.setAll(Sesion.getPedido().getItems());
 
+
+        Sesion.setCurrentOrder((new OrderDAOImp()).get(Sesion.getCurrentOrder().getId()));
+        observableList.setAll(Sesion.getCurrentOrder().getItems());
+        System.out.println(observableList);
         tvItem.setItems(observableList);
     }
 
@@ -73,9 +75,11 @@ public class OrderViewDetailsController implements Initializable {
 
     @javafx.fxml.FXML
     public void anyadir(ActionEvent actionEvent) {
+        /*
         var item = new Item();
         Sesion.setItem(item);
         Main.loadAnyadirProducto("ventana-hacer-pedido.fxml");
+        */
     }
 
     @javafx.fxml.FXML
@@ -84,7 +88,7 @@ public class OrderViewDetailsController implements Initializable {
 
     @javafx.fxml.FXML
     public void logout(ActionEvent actionEvent) {
-        Sesion.setUsuario(null);
+        Sesion.setCurrentUser(null);
         Main.loadLogin("ventana-login.fxml");
     }
 }

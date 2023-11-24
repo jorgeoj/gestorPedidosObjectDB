@@ -11,8 +11,6 @@ public class Main extends Application {
 
     private static Stage myStage;
 
-
-
     @Override
     public void start(Stage stage) throws IOException {
         myStage = stage;
@@ -33,28 +31,7 @@ public class Main extends Application {
         }
     }
 
-    public static void loadMain(String ruta) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(ruta));
-            Scene scene = new Scene(fxmlLoader.load(), 850, 600);
-            myStage.setScene(scene);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static void loadFXMLDetalles(String ruta) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(ruta));
-            Scene scene = new Scene(fxmlLoader.load(), 600, 400);
-            myStage.setScene(scene);
-        } catch (IOException var3) {
-            var3.printStackTrace();
-            throw new RuntimeException(var3);
-        }
-    }
-
-    public static void loadAnyadirProducto(String ruta) {
+    public static void loadWindow(String ruta) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(ruta));
             Scene scene = new Scene(fxmlLoader.load(), 850, 600);

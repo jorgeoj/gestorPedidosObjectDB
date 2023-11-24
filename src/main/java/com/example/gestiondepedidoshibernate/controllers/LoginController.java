@@ -31,22 +31,27 @@ public class LoginController implements Initializable {
     @FXML
     public void login(ActionEvent actionEvent) {
         String user = txtUser.getText();
-        String password = txtPassword.getText();
-        if (user.length() < 4 || password.length() < 4) {
-            info.setText("Introduce los datos");
-            info.setStyle("-fx-background-color:red; -fx-text-fill: white;");
+        String pass = txtPassword.getText();
 
-        } else {
-            User u = (new UserDAOImp()).validateUser(user, password);
-            Sesion.setUsuario(u);
-            if (u == null) {
-                info.setText("Usuario no encontrado");
-                info.setStyle("-fx-background-color:red; -fx-text-fill: white;");
-            } else {
-                info.setText("Usuario " + user + "(" + password + ") correcto");
-                info.setStyle("-fx-background-color:green; -fx-text-fill: white;");
-                Main.loadMain("ventana-principal.fxml");
+        if( user.length()<4 || pass.length()<4 ){
+            info.setText("Introduce los datos");
+            info.setStyle("-fx-text-fill: red;");
+
+        } else{
+
+            // ACCESO A BASE DE DATOS PARA LA VALIDACION
+            User u = (new UserDAOImp()).validateUser( user, pass );
+
+            if(u==null){
+                info.setText("Error, datos incorrectos");
+                info.setStyle("-fx-text-fill: red;");
+            }else {
+                Sesion.setCurrentUser(u);
+
+                // Guardar usuario en sesión e ir a la proxima ventana
+                Main.loadWindow("ventana-principal.fxml");
             }
+
         }
     }
 }

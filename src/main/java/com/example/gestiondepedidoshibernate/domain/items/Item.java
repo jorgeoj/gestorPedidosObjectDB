@@ -8,6 +8,7 @@ import lombok.Data;
 
 import java.io.Serializable;
 
+
 @Data
 @Entity
 @Table(name = "item")
@@ -18,7 +19,7 @@ public class Item implements Serializable {
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "codigo_pedido", referencedColumnName = "codigo_pedido")
+    @JoinColumn(name = "codigo_pedido", referencedColumnName = "codigo")
     private Order codigo_pedido;
 
     @OneToOne
@@ -27,4 +28,14 @@ public class Item implements Serializable {
 
     @Column(name = "cantidad")
     private Integer cantidad;
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id=" + id +
+                ", codigo_pedido=" + codigo_pedido.getCodigo() +
+                ", producto_id=" + producto_id +
+                ", cantidad=" + cantidad +
+                '}';
+    }
 }

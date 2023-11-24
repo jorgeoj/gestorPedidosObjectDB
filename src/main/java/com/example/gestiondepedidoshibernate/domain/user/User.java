@@ -26,6 +26,19 @@ public class User implements Serializable {
     @Column(name = "email")
     private String email;
 
-    @OneToMany(mappedBy = "usuario", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "usuarioId", fetch = FetchType.EAGER)
     private List<Order> pedidos = new ArrayList<>(0);
+
+    /*
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", contrasenya='" + contrasenya + '\'' +
+                ", email='" + email + '\'' +
+                ", pedidos=" + pedidos +
+                '}';
+    }
+    */
 }

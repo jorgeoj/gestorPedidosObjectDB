@@ -12,12 +12,7 @@ public class OrderDAOImp implements DAO<Order> {
 
     @Override
     public ArrayList<Order> getAll() {
-        var salida = new ArrayList<Order>(0);
-        try(Session sesion = HibernateUtil.getSessionFactory().openSession()){
-            Query<Order> query = sesion.createQuery("from Order", Order.class);
-            salida = (ArrayList<Order>) query.getResultList();
-        }
-        return salida;
+        return null;
     }
 
     @Override

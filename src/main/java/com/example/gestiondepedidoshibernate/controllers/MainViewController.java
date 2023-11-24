@@ -45,66 +45,54 @@ public class MainViewController implements Initializable {
     @javafx.fxml.FXML
     private Label lblTitulo;
 
-    private ObservableList<Order> observableList;
     private OrderDAOImp orderDAOImp = new OrderDAOImp();
 
 
     public MainViewController(){}
 
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        this.colIdPedido.setCellValueFactory((fila)->{
+        colIdPedido.setCellValueFactory((fila)->{
             String id = String.valueOf((fila.getValue().getId()));
             return new SimpleStringProperty(id);
         });
-        this.colFechaPedido.setCellValueFactory((fila)->{
+        colFechaPedido.setCellValueFactory((fila)->{
             String fecha = String.valueOf((fila.getValue().getFecha()));
             return new SimpleStringProperty(fecha);
         });
-        this.colCodPedido.setCellValueFactory((fila) -> {
+        colCodPedido.setCellValueFactory((fila) -> {
             String codigoPedido = fila.getValue().getCodigo();
             return new SimpleStringProperty(codigoPedido);
         });
-        this.colUsuarioPedido.setCellValueFactory((fila) -> {
-            String usuarioId = String.valueOf(fila.getValue().getUsuarioId());
+        colUsuarioPedido.setCellValueFactory((fila) -> {
+            String usuarioId = String.valueOf(fila.getValue().getUsuarioId().getNombre());
             return new SimpleStringProperty(usuarioId);
         });
-        this.colTotalPedido.setCellValueFactory((fila) -> {
-            String total = String.valueOf(fila.getValue().getTotal());
+        colTotalPedido.setCellValueFactory((fila) -> {
+            String total = String.valueOf(fila.getValue().getTotal() + " €");
             return new SimpleStringProperty(total);
         });
 
-        observableList = FXCollections.observableArrayList();
+        Sesion.setCurrentUser((new UserDAOImp()).get(Sesion.getCurrentUser().getId()));
+        tvPedidos.getItems().addAll(Sesion.getCurrentUser().getPedidos());
+        System.out.println(Sesion.getCurrentUser().getPedidos());
 
-        Sesion.setUsuario((new UserDAOImp()).get(Sesion.getUsuario().getId()));
-        
-        loadList();
-
-        lblTitulo.setText("Bienvenido, " + Sesion.getUsuario().getNombre() + " estos son tus pedidos");
-
+        lblTitulo.setText("Bienvenido, " + Sesion.getCurrentUser().getNombre()+ " estos son tus pedidos");
         tvPedidos.getSelectionModel().selectedItemProperty().addListener((observableValue, pedido, t1) -> {
-            Sesion.setPedido(t1);
+            Sesion.setCurrentOrder(t1);
         });
 
         tvPedidos.setOnMouseClicked(event -> {
             if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
                 Order selectedPedido = tvPedidos.getSelectionModel().getSelectedItem();
                 if (selectedPedido != null) {
-                    Sesion.setPedido(selectedPedido);
-                    Main.loadFXMLDetalles("ventana-pedido-detalles.fxml");
+                    Sesion.setCurrentOrder(selectedPedido);
+                    Main.loadWindow("ventana-pedido-detalles.fxml");
                 }
             }
         });
     }
 
-    private void loadList() {
-        observableList.setAll(Sesion.getUsuario().getPedidos());
-        for (Order order : observableList) {
-            Double totalPedido = calculateTotal(order);
-            order.setTotal(totalPedido);
-        }
-        tvPedidos.setItems(observableList);
-    }
-
+    /*
     private Double calculateTotal(Order order) {
         Double total = 0.0;
         for (Item item: order.getItems()){
@@ -112,15 +100,17 @@ public class MainViewController implements Initializable {
         }
         return total;
     }
+    */
 
     @javafx.fxml.FXML
     public void logout(ActionEvent actionEvent) {
-        Sesion.setUsuario(null);
+        Sesion.setCurrentUser(null);
         Main.loadLogin("ventana-login.fxml");
     }
 
     @javafx.fxml.FXML
     public void anyadirPedido(ActionEvent actionEvent) {
+        /*
         Order newOrder = new Order();
 
         try (Session sesion = HibernateUtil.getSessionFactory().openSession()) {
@@ -158,5 +148,6 @@ public class MainViewController implements Initializable {
         tvPedidos.setItems(observableList);
         Sesion.setPedido((new OrderDAOImp()).save(newOrder));
         Sesion.setPedido(newOrder);
+         */
     }
 }
