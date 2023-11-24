@@ -3,16 +3,14 @@ package com.example.gestiondepedidoshibernate.controllers;
 import com.example.gestiondepedidoshibernate.Main;
 import com.example.gestiondepedidoshibernate.Sesion;
 import com.example.gestiondepedidoshibernate.domain.items.Item;
+import com.example.gestiondepedidoshibernate.domain.items.ItemDAOImp;
 import com.example.gestiondepedidoshibernate.domain.orders.OrderDAOImp;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -36,8 +34,12 @@ public class OrderViewDetailsController implements Initializable {
     private Button btnAnyadir;
     @javafx.fxml.FXML
     private Button btnEliminar;
+    @javafx.fxml.FXML
+    private Button btnVolver;
 
+    private ItemDAOImp itemDAOImp = new ItemDAOImp();
     private ObservableList<Item> observableList;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -63,32 +65,52 @@ public class OrderViewDetailsController implements Initializable {
 
         observableList = FXCollections.observableArrayList();
 
-
-
         Sesion.setCurrentOrder((new OrderDAOImp()).get(Sesion.getCurrentOrder().getId()));
         observableList.setAll(Sesion.getCurrentOrder().getItems());
         // System.out.println(observableList); <- Para hacer pruebas
+
         tvItem.setItems(observableList);
     }
 
-    //TODO: Mirar a ver si necesito botones de añadir y eliminar o no
-
     @javafx.fxml.FXML
     public void anyadir(ActionEvent actionEvent) {
-        /*
         var item = new Item();
         Sesion.setItem(item);
-        Main.loadAnyadirProducto("ventana-hacer-pedido.fxml");
-        */
+        Main.loadWindow("ventana-hacer-pedido.fxml");
     }
 
     @javafx.fxml.FXML
     public void eliminar(ActionEvent actionEvent) {
+        //Se coge el item seleccionado.
+        Item itemSeleccionado = tvItem.getSelectionModel().getSelectedItem();
+
+        //Confirmación de eliminación mediante un diálogo de confirmación.
+        if (itemSeleccionado != null) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setContentText("¿Deseas borrar el item: " + itemSeleccionado.getId() + ", que contiene el producto: " + itemSeleccionado.getProducto_id().getNombre() + "?");
+            var result = alert.showAndWait().get();
+
+            //Si se confirma la eliminación, se borra el ítem seleccionado de la lista y de la base de datos.
+            if (result.getButtonData() == ButtonBar.ButtonData.OK_DONE) {
+                itemDAOImp.delete(itemSeleccionado);
+                observableList.remove(itemSeleccionado);
+            }
+        } else {
+            //Muestra un mensaje de error o advertencia al usuario si no se ha seleccionado ningún pedido para eliminar.
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setContentText("Por favor, selecciona un pedido para eliminar.");
+            alert.showAndWait();
+        }
     }
 
     @javafx.fxml.FXML
     public void logout(ActionEvent actionEvent) {
         Sesion.setCurrentUser(null);
         Main.loadLogin("ventana-login.fxml");
+    }
+
+    @javafx.fxml.FXML
+    public void volver(ActionEvent actionEvent) {
+        Main.loadWindow("ventana-principal.fxml");
     }
 }

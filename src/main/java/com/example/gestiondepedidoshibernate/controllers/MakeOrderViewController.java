@@ -47,8 +47,7 @@ public class MakeOrderViewController implements Initializable {
 
     @javafx.fxml.FXML
     public void aceptar(ActionEvent actionEvent) {
-        /*
-        Order order = Sesion.getPedido();
+        Order order = Sesion.getCurrentOrder();
         if (order != null) {
             Item item = new Item();
             item.setCodigo_pedido(order);
@@ -57,9 +56,8 @@ public class MakeOrderViewController implements Initializable {
 
             Sesion.setItem((new ItemDAOImp()).save(item));
             Sesion.setItem(item);
-            Main.loadMain("ventana-principal.fxml");
+            Main.loadWindow("ventana-pedido-detalles.fxml");
         }
-        */
     }
 
     @javafx.fxml.FXML

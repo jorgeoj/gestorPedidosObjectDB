@@ -5,6 +5,8 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
@@ -14,7 +16,7 @@
     <children>
       <HBox alignment="TOP_RIGHT">
          <children>
-            <Button fx:id="btnCerrarSesion" mnemonicParsing="false" onAction="#logout" style="-fx-background-color: #0598ff;" text="Cerrar sesión" textFill="WHITE">
+            <Button fx:id="btnCerrarSesion" mnemonicParsing="false" onAction="#logout" stylesheets="@style.css" text="Cerrar sesión">
                <font>
                   <Font size="14.0" />
                </font>
@@ -25,6 +27,25 @@
          </VBox.margin>
          <padding>
             <Insets bottom="15.0" left="15.0" right="15.0" top="15.0" />
+         </padding>
+      </HBox>
+      <HBox prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <Button fx:id="btnVolver" mnemonicParsing="false" onAction="#volver" stylesheets="@style.css" text="Volver">
+               <graphic>
+                  <ImageView fitHeight="19.0" fitWidth="53.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/volver-flecha.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
+         <padding>
+            <Insets left="20.0" />
          </padding>
       </HBox>
         <BorderPane id="contenedor" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0">
@@ -66,7 +87,7 @@
                         <Insets bottom="10.0" />
                     </BorderPane.margin>
                     <children>
-                        <Button fx:id="btnAnyadir" mnemonicParsing="false" onAction="#anyadir" style="-fx-background-color: #0598ff;" text="Añadir" textFill="WHITE">
+                        <Button fx:id="btnAnyadir" mnemonicParsing="false" onAction="#anyadir" stylesheets="@style.css" text="Añadir">
                             <HBox.margin>
                                 <Insets right="10.0" />
                             </HBox.margin>
@@ -74,7 +95,7 @@
                         <Font size="14.0" />
                      </font>
                         </Button>
-                        <Button fx:id="btnEliminar" mnemonicParsing="false" onAction="#eliminar" style="-fx-background-color: #0598ff;" text="Eliminar" textFill="WHITE">
+                        <Button fx:id="btnEliminar" mnemonicParsing="false" onAction="#eliminar" stylesheets="@style.css" text="Eliminar">
                             <HBox.margin>
                                 <Insets left="10.0" />
                             </HBox.margin>

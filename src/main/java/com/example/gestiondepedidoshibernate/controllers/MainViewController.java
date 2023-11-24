@@ -12,10 +12,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
@@ -44,8 +41,12 @@ public class MainViewController implements Initializable {
     private Button btnNuevoPedido;
     @javafx.fxml.FXML
     private Label lblTitulo;
+    @javafx.fxml.FXML
+    private Button btnEliminar;
 
+    private ObservableList<Order> observableList;
     private OrderDAOImp orderDAOImp = new OrderDAOImp();
+
 
 
     public MainViewController(){}
@@ -72,14 +73,19 @@ public class MainViewController implements Initializable {
             return new SimpleStringProperty(total);
         });
 
+        observableList = FXCollections.observableArrayList();
         Sesion.setCurrentUser((new UserDAOImp()).get(Sesion.getCurrentUser().getId()));
-        tvPedidos.getItems().addAll(Sesion.getCurrentUser().getPedidos());
-        System.out.println(Sesion.getCurrentUser().getPedidos());
+        cargarLista();
+
+        //tvPedidos.getItems().addAll(Sesion.getCurrentUser().getPedidos());
+        // System.out.println(Sesion.getCurrentUser().getPedidos()); <- Para probar
 
         lblTitulo.setText("Bienvenido, " + Sesion.getCurrentUser().getNombre()+ " estos son tus pedidos");
         tvPedidos.getSelectionModel().selectedItemProperty().addListener((observableValue, pedido, t1) -> {
             Sesion.setCurrentOrder(t1);
         });
+
+
 
         tvPedidos.setOnMouseClicked(event -> {
             if (event.getButton().equals(MouseButton.PRIMARY) && event.getClickCount() == 2) {
@@ -92,15 +98,35 @@ public class MainViewController implements Initializable {
         });
     }
 
-    /*
-    private Double calculateTotal(Order order) {
-        Double total = 0.0;
-        for (Item item: order.getItems()){
+    private void cargarLista() {
+
+        //Obtiene la lista de pedidos del usuario actual y la asigna a la lista Observable.
+        observableList.setAll(Sesion.getCurrentUser().getPedidos());
+
+        //Recorre cada pedido en la lista Observable.
+        for (Order order : observableList) {
+            //Calcula el total del pedido y lo establece en el pedido actual.
+            Double totalPedido = calcularTotalPedido(order);
+            order.setTotal(totalPedido);
+        }
+
+        //Establece la lista Observable como los datos a mostrar en la tabla.
+        tvPedidos.setItems(observableList);
+    }
+
+    private Double calcularTotalPedido(Order order) {
+        //Inicializa la variable total como 0.0 para almacenar el total del pedido.
+        Double total  = 0.0;
+
+        //Itera a través de los items del pedido para calcular el total.
+        for (Item item : order.getItems()){
+
+            //Obtiene el precio del producto y lo multiplica por la cantidad, sumando al total.
             total += item.getProducto_id().getPrecio() * item.getCantidad();
         }
+        //Retorna el total calculado del pedido.
         return total;
     }
-    */
 
     @javafx.fxml.FXML
     public void logout(ActionEvent actionEvent) {
@@ -110,7 +136,6 @@ public class MainViewController implements Initializable {
 
     @javafx.fxml.FXML
     public void anyadirPedido(ActionEvent actionEvent) {
-        /*
         Order newOrder = new Order();
 
         try (Session sesion = HibernateUtil.getSessionFactory().openSession()) {
@@ -134,7 +159,7 @@ public class MainViewController implements Initializable {
         String fechaActual = dateFormat.format(new Date());
         newOrder.setFecha(fechaActual);
 
-        newOrder.setUsuarioId(Sesion.getUsuario());
+        newOrder.setUsuarioId(Sesion.getCurrentUser());
         newOrder.setId(0L);
 
         if (newOrder.getItems().isEmpty()) {
@@ -146,8 +171,31 @@ public class MainViewController implements Initializable {
 
         // Actualizar la tabla
         tvPedidos.setItems(observableList);
-        Sesion.setPedido((new OrderDAOImp()).save(newOrder));
-        Sesion.setPedido(newOrder);
-         */
+        Sesion.setCurrentOrder((new OrderDAOImp()).save(newOrder));
+        Sesion.setCurrentOrder(newOrder);
+    }
+
+    @javafx.fxml.FXML
+    public void eliminar(ActionEvent actionEvent) {
+        //Se coge el pedido seleccionado.
+        Order pedidoSeleccionado = tvPedidos.getSelectionModel().getSelectedItem();
+
+        //Confirmación de eliminación mediante un diálogo de confirmación.
+        if (pedidoSeleccionado != null) {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setContentText("¿Deseas borrar el pedido: " + pedidoSeleccionado.getCodigo() + "?");
+            var result = alert.showAndWait().get();
+
+            //Si se confirma la eliminación, se borra el ítem seleccionado de la lista y de la base de datos.
+            if (result.getButtonData() == ButtonBar.ButtonData.OK_DONE) {
+                orderDAOImp.delete(pedidoSeleccionado);
+                observableList.remove(pedidoSeleccionado);
+            }
+        } else {
+            //Muestra un mensaje de error o advertencia al usuario si no se ha seleccionado ningún pedido para eliminar.
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setContentText("Por favor, selecciona un pedido para eliminar.");
+            alert.showAndWait();
+        }
     }
 }
