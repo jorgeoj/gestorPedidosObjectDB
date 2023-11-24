@@ -24,7 +24,6 @@ public class UserDAOImp implements DAO<User> {
         try(Session s = HibernateUtil.getSessionFactory().openSession()){
             salida = s.get(User.class,id);
         }
-
         return salida;
     }
 

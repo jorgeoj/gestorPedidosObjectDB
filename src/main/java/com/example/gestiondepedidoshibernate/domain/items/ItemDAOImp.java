@@ -11,13 +11,16 @@ import java.util.ArrayList;
 public class ItemDAOImp implements DAO<Item> {
     @Override
     public ArrayList<Item> getAll() {
-        return null;
+        var salida = new ArrayList<Item>(0);
+        try (Session sesion = HibernateUtil.getSessionFactory().openSession()) {
+            Query<Item> query = sesion.createQuery("from Item", Item.class);
+            salida = (ArrayList<Item>) query.getResultList();
+        }
+        return salida;
     }
 
     @Override
-    public Item get(Long id) {
-        return null;
-    }
+    public Item get(Long id) {return null;}
 
     @Override
     public Item save(Item data) {
@@ -47,5 +50,10 @@ public class ItemDAOImp implements DAO<Item> {
     public void update(Item data) {}
 
     @Override
-    public void delete(Item data) {}
+    public void delete(Item data) {
+        HibernateUtil.getSessionFactory().inTransaction(session -> {
+            Item item = session.get(Item.class, data.getId());
+            session.remove(item);
+        });
+    }
 }

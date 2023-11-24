@@ -67,7 +67,7 @@ public class OrderViewDetailsController implements Initializable {
 
         Sesion.setCurrentOrder((new OrderDAOImp()).get(Sesion.getCurrentOrder().getId()));
         observableList.setAll(Sesion.getCurrentOrder().getItems());
-        System.out.println(observableList);
+        // System.out.println(observableList); <- Para hacer pruebas
         tvItem.setItems(observableList);
     }
 
