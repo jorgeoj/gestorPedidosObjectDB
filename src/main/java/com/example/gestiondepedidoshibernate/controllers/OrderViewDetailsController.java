@@ -15,6 +15,9 @@ import javafx.scene.control.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * Controlador para la vista de detalles de un pedido.
+ */
 public class OrderViewDetailsController implements Initializable {
     @javafx.fxml.FXML
     private Button btnCerrarSesion;
@@ -40,7 +43,12 @@ public class OrderViewDetailsController implements Initializable {
     private ItemDAOImp itemDAOImp = new ItemDAOImp();
     private ObservableList<Item> observableList;
 
-
+    /**
+     * Inicializa la vista de detalles del pedido.
+     *
+     * @param url            La URL de inicialización.
+     * @param resourceBundle El ResourceBundle utilizado.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         cIdItem.setCellValueFactory((fila) -> {
@@ -67,11 +75,15 @@ public class OrderViewDetailsController implements Initializable {
 
         Sesion.setCurrentOrder((new OrderDAOImp()).get(Sesion.getCurrentOrder().getId()));
         observableList.setAll(Sesion.getCurrentOrder().getItems());
-        // System.out.println(observableList); <- Para hacer pruebas
 
         tvItem.setItems(observableList);
     }
 
+    /**
+     * Maneja el evento de agregar un nuevo ítem al pedido.
+     *
+     * @param actionEvent El evento que desencadena la acción.
+     */
     @javafx.fxml.FXML
     public void anyadir(ActionEvent actionEvent) {
         var item = new Item();
@@ -79,6 +91,11 @@ public class OrderViewDetailsController implements Initializable {
         Main.loadWindow("ventana-hacer-pedido.fxml");
     }
 
+    /**
+     * Maneja el evento de eliminar un ítem del pedido.
+     *
+     * @param actionEvent El evento que desencadena la acción.
+     */
     @javafx.fxml.FXML
     public void eliminar(ActionEvent actionEvent) {
         //Se coge el item seleccionado.
@@ -103,12 +120,22 @@ public class OrderViewDetailsController implements Initializable {
         }
     }
 
+    /**
+     * Maneja el evento de cerrar sesión.
+     *
+     * @param actionEvent El evento que desencadena la acción.
+     */
     @javafx.fxml.FXML
     public void logout(ActionEvent actionEvent) {
         Sesion.setCurrentUser(null);
         Main.loadLogin("ventana-login.fxml");
     }
 
+    /**
+     * Maneja el evento de volver a la ventana principal.
+     *
+     * @param actionEvent El evento que desencadena la acción.
+     */
     @javafx.fxml.FXML
     public void volver(ActionEvent actionEvent) {
         Main.loadWindow("ventana-principal.fxml");

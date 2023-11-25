@@ -3,10 +3,11 @@ package com.example.gestiondepedidoshibernate.domain.products;
 import jakarta.persistence.*;
 import lombok.Data;
 
-
 import java.io.Serializable;
 
-
+/**
+ * Clase que representa un producto en el sistema.
+ */
 @Data
 @Entity
 @Table(name = "producto")

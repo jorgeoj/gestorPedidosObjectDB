@@ -5,10 +5,11 @@ import com.example.gestiondepedidoshibernate.domain.products.Product;
 import jakarta.persistence.*;
 import lombok.Data;
 
-
 import java.io.Serializable;
 
-
+/**
+ * Clase que representa un ítem en un pedido.
+ */
 @Data
 @Entity
 @Table(name = "item")
@@ -29,6 +30,10 @@ public class Item implements Serializable {
     @Column(name = "cantidad")
     private Integer cantidad;
 
+    /**
+     * Devuelve una representación en cadena del ítem.
+     * @return Cadena que representa el ítem.
+     */
     @Override
     public String toString() {
         return "Item{" +
@@ -39,3 +44,4 @@ public class Item implements Serializable {
                 '}';
     }
 }
+

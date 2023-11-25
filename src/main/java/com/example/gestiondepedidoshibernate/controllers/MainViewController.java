@@ -22,6 +22,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.ResourceBundle;
 
+/**
+ * Controlador para la vista principal.
+ */
 public class MainViewController implements Initializable {
     @javafx.fxml.FXML
     private Button btnCerrarSesion;
@@ -47,10 +50,17 @@ public class MainViewController implements Initializable {
     private ObservableList<Order> observableList;
     private OrderDAOImp orderDAOImp = new OrderDAOImp();
 
-
-
+    /**
+     * Constructor vacío de la clase.
+     */
     public MainViewController(){}
 
+    /**
+     * Inicializa la vista principal.
+     *
+     * @param url            La URL de inicialización.
+     * @param resourceBundle El ResourceBundle utilizado.
+     */
     public void initialize(URL url, ResourceBundle resourceBundle) {
         colIdPedido.setCellValueFactory((fila)->{
             String id = String.valueOf((fila.getValue().getId()));
@@ -69,16 +79,13 @@ public class MainViewController implements Initializable {
             return new SimpleStringProperty(usuarioId);
         });
         colTotalPedido.setCellValueFactory((fila) -> {
-            String total = String.valueOf(fila.getValue().getTotal() + " €");
+            String total = fila.getValue().getTotal() + " €";
             return new SimpleStringProperty(total);
         });
 
         observableList = FXCollections.observableArrayList();
         Sesion.setCurrentUser((new UserDAOImp()).get(Sesion.getCurrentUser().getId()));
         cargarLista();
-
-        //tvPedidos.getItems().addAll(Sesion.getCurrentUser().getPedidos());
-        // System.out.println(Sesion.getCurrentUser().getPedidos()); <- Para probar
 
         lblTitulo.setText("Bienvenido, " + Sesion.getCurrentUser().getNombre()+ " estos son tus pedidos");
         tvPedidos.getSelectionModel().selectedItemProperty().addListener((observableValue, pedido, t1) -> {
@@ -98,6 +105,9 @@ public class MainViewController implements Initializable {
         });
     }
 
+    /**
+     * Carga la lista de pedidos del usuario actual en la tabla.
+     */
     private void cargarLista() {
 
         //Obtiene la lista de pedidos del usuario actual y la asigna a la lista Observable.
@@ -109,11 +119,16 @@ public class MainViewController implements Initializable {
             Double totalPedido = calcularTotalPedido(order);
             order.setTotal(totalPedido);
         }
-
         //Establece la lista Observable como los datos a mostrar en la tabla.
         tvPedidos.setItems(observableList);
     }
 
+    /**
+     * Calcula el total de un pedido basado en sus items.
+     *
+     * @param order El pedido del cual calcular el total.
+     * @return El total del pedido.
+     */
     private Double calcularTotalPedido(Order order) {
         //Inicializa la variable total como 0.0 para almacenar el total del pedido.
         Double total  = 0.0;
@@ -124,16 +139,26 @@ public class MainViewController implements Initializable {
             //Obtiene el precio del producto y lo multiplica por la cantidad, sumando al total.
             total += item.getProducto_id().getPrecio() * item.getCantidad();
         }
-        //Retorna el total calculado del pedido.
+        //Devuelve el total calculado del pedido.
         return total;
     }
 
+    /**
+     * Maneja el evento de cerrar sesión.
+     *
+     * @param actionEvent El evento que desencadena la acción.
+     */
     @javafx.fxml.FXML
     public void logout(ActionEvent actionEvent) {
         Sesion.setCurrentUser(null);
         Main.loadLogin("ventana-login.fxml");
     }
 
+    /**
+     * Maneja el evento de añadir un nuevo pedido.
+     *
+     * @param actionEvent El evento que desencadena la acción.
+     */
     @javafx.fxml.FXML
     public void anyadirPedido(ActionEvent actionEvent) {
         Order newOrder = new Order();
@@ -175,6 +200,11 @@ public class MainViewController implements Initializable {
         Sesion.setCurrentOrder(newOrder);
     }
 
+    /**
+     * Maneja el evento de eliminar un pedido seleccionado.
+     *
+     * @param actionEvent El evento que desencadena la acción.
+     */
     @javafx.fxml.FXML
     public void eliminar(ActionEvent actionEvent) {
         //Se coge el pedido seleccionado.

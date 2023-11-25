@@ -8,8 +8,15 @@ import org.hibernate.Transaction;
 
 import java.util.ArrayList;
 
+/**
+ * Implementación concreta de DAO para la entidad Order.
+ */
 public class OrderDAOImp implements DAO<Order> {
 
+    /**
+     * Obtiene todos los pedidos.
+     * @return Lista de todos los pedidos almacenados.
+     */
     @Override
     public ArrayList<Order> getAll() {
         var salida = new ArrayList<Order>(0);
@@ -20,6 +27,11 @@ public class OrderDAOImp implements DAO<Order> {
         return salida;
     }
 
+    /**
+     * Obtiene un pedido por su ID.
+     * @param id El ID del pedido a obtener.
+     * @return El pedido correspondiente al ID especificado.
+     */
     @Override
     public Order get(Long id) {
         var salida = new Order();
@@ -29,21 +41,23 @@ public class OrderDAOImp implements DAO<Order> {
         return salida;
     }
 
+    /**
+     * Guarda un nuevo pedido.
+     * @param data El pedido a guardar.
+     * @return El pedido guardado.
+     */
     @Override
     public Order save(Order data) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction transaction = null;
             try {
-                // Comenzar la transacción
                 transaction = session.beginTransaction();
 
                 // Guardar el nuevo pedido en la base de datos
                 session.save(data);
 
-                // Commit de la transacción
                 transaction.commit();
             } catch (Exception e) {
-                // Manejar excepción que pueda ocurrir durante la transacción
                 if (transaction != null) {
                     transaction.rollback();
                 }
@@ -53,28 +67,34 @@ public class OrderDAOImp implements DAO<Order> {
         }
     }
 
+    /**
+     * Actualiza un pedido existente.
+     * @param data El pedido a actualizar.
+     */
     @Override
     public void update(Order data) {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Transaction transaction = null;
+        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
+            Transaction transaction = null;
+            try {
+                transaction = session.beginTransaction();
 
-        try {
-            transaction = session.beginTransaction();
+                // Actualizar el pedido en la base de datos
+                session.update(data);
 
-            // Actualizar el pedido en la base de datos
-            session.update(data);
-
-            transaction.commit();
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
+                transaction.commit();
+            } catch (Exception e) {
+                if (transaction != null) {
+                    transaction.rollback();
+                }
+                e.printStackTrace();
             }
-            e.printStackTrace();
-        } finally {
-            session.close();
         }
     }
 
+    /**
+     * Elimina un pedido existente.
+     * @param data El pedido a eliminar.
+     */
     @Override
     public void delete(Order data) {
         HibernateUtil.getSessionFactory().inTransaction((session -> {

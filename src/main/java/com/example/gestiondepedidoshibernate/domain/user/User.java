@@ -8,6 +8,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Clase que representa un usuario en el sistema.
+ */
 @Data
 @Entity
 @Table(name = "usuario")
@@ -28,17 +31,4 @@ public class User implements Serializable {
 
     @OneToMany(mappedBy = "usuarioId", fetch = FetchType.EAGER)
     private List<Order> pedidos = new ArrayList<>(0);
-
-    /*
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", nombre='" + nombre + '\'' +
-                ", contrasenya='" + contrasenya + '\'' +
-                ", email='" + email + '\'' +
-                ", pedidos=" + pedidos +
-                '}';
-    }
-    */
 }

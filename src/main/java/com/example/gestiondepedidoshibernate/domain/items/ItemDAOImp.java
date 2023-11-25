@@ -8,7 +8,15 @@ import org.hibernate.Session;
 
 import java.util.ArrayList;
 
+/**
+ * Implementación concreta de DAO para la entidad Item.
+ */
 public class ItemDAOImp implements DAO<Item> {
+
+    /**
+     * Obtiene todos los elementos Item.
+     * @return Lista de todos los elementos Item almacenados.
+     */
     @Override
     public ArrayList<Item> getAll() {
         var salida = new ArrayList<Item>(0);
@@ -19,24 +27,33 @@ public class ItemDAOImp implements DAO<Item> {
         return salida;
     }
 
+    /**
+     * Obtiene un elemento Item por su ID.
+     * @param id El ID del elemento Item a obtener.
+     * @return El elemento Item correspondiente al ID especificado.
+     */
     @Override
-    public Item get(Long id) {return null;}
+    public Item get(Long id) {
+        return null; // Implementar la lógica para obtener un elemento Item por ID
+    }
 
+    /**
+     * Guarda un nuevo elemento Item.
+     * @param data El elemento Item a guardar.
+     * @return El elemento Item guardado.
+     */
     @Override
     public Item save(Item data) {
         try (Session session = HibernateUtil.getSessionFactory().openSession()) {
             Transaction transaction = null;
             try {
-                // Comenzar la transacción
                 transaction = session.beginTransaction();
 
-                // Guardar el nuevo pedido en la base de datos
+                // Guardar el nuevo elemento Item en la base de datos
                 session.save(data);
 
-                // Commit de la transacción
                 transaction.commit();
             } catch (Exception e) {
-                // Manejar excepción que pueda ocurrir durante la transacción
                 if (transaction != null) {
                     transaction.rollback();
                 }
@@ -46,9 +63,19 @@ public class ItemDAOImp implements DAO<Item> {
         }
     }
 
+    /**
+     * Actualiza un elemento Item existente.
+     * @param data El elemento Item a actualizar.
+     */
     @Override
-    public void update(Item data) {}
+    public void update(Item data) {
+        // Implementar la lógica para actualizar un elemento Item
+    }
 
+    /**
+     * Elimina un elemento Item existente.
+     * @param data El elemento Item a eliminar.
+     */
     @Override
     public void delete(Item data) {
         HibernateUtil.getSessionFactory().inTransaction(session -> {

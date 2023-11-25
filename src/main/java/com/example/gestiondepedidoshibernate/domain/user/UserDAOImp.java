@@ -7,7 +7,15 @@ import org.hibernate.query.Query;
 
 import java.util.ArrayList;
 
+/**
+ * Implementación concreta de DAO para la entidad User.
+ */
 public class UserDAOImp implements DAO<User> {
+
+    /**
+     * Obtiene todos los usuarios.
+     * @return Lista de todos los usuarios almacenados.
+     */
     @Override
     public ArrayList<User> getAll() {
         var salida = new ArrayList<User>(0);
@@ -18,6 +26,11 @@ public class UserDAOImp implements DAO<User> {
         return salida;
     }
 
+    /**
+     * Obtiene un usuario por su ID.
+     * @param id El ID del usuario a obtener.
+     * @return El usuario correspondiente al ID especificado.
+     */
     @Override
     public User get(Long id) {
         var salida = new User();
@@ -27,31 +40,46 @@ public class UserDAOImp implements DAO<User> {
         return salida;
     }
 
+    /**
+     * Guarda un nuevo usuario.
+     * @param data El usuario a guardar.
+     * @return El usuario guardado.
+     */
     @Override
     public User save(User data) {
-        return null;
+        return null; // No hace nada
     }
 
+    /**
+     * Actualiza un usuario existente.
+     * @param data El usuario a actualizar.
+     */
     @Override
-    public void update(User data) {}
+    public void update(User data) {
+        // No hace nada
+    }
 
+    /**
+     * Elimina un usuario existente.
+     * @param data El usuario a eliminar.
+     */
     @Override
-    public void delete(User data) {}
+    public void delete(User data) {
+        // No hace nada
+    }
 
+    /**
+     * Valida un usuario por su nombre de usuario y contraseña.
+     * @param username Nombre de usuario.
+     * @param password Contraseña del usuario.
+     * @return El usuario validado o null si no se encuentra.
+     */
     public User validateUser(String username, String password){
-        //Desde un lambda no se puede escribir desde una variable externa.
         User result = null;
-
-        //Si la sesión está dentro de un try con recursos se cierra sola.
         try(Session session = HibernateUtil.getSessionFactory().openSession()){
-            //Se hacen consultas a la entidad (clase User) no a la tabla.
             Query<User> query = session.createQuery("from User where nombre=:u and contrasenya=:p", User.class);
-
-            //Se refieren a los que entran por el método.
             query.setParameter("u", username);
             query.setParameter("p", password);
-            //
-
             try {
                 result = query.getSingleResult();
             } catch (Exception e){
