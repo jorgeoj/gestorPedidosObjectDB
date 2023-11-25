@@ -38,13 +38,20 @@
                   <Insets bottom="40.0" />
                </VBox.margin>
             </PasswordField>
-            <Button fx:id="btnLogin" mnemonicParsing="false" onAction="#login" prefHeight="40.0" prefWidth="100.0" stylesheets="@style.css" text="Iniciar sesión" textFill="WHITE">
+            <Button fx:id="btnLogin" mnemonicParsing="false" onAction="#login" prefHeight="40.0" prefWidth="150.0" stylesheets="@style.css" text="Iniciar sesión" textFill="WHITE">
                <VBox.margin>
                   <Insets top="25.0" />
                </VBox.margin>
                <font>
                   <Font size="14.0" />
                </font>
+               <graphic>
+                  <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../images/login.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
             </Button>
          </children>
       </VBox>
