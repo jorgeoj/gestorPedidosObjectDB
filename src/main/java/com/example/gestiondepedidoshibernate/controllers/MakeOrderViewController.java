@@ -35,7 +35,22 @@ public class MakeOrderViewController implements Initializable {
         observableList = FXCollections.observableArrayList();
         ProductDAOImp productoDAO = new ProductDAOImp();
         observableList.setAll(productoDAO.getAll());
+
         comboProducto.setItems(observableList);
+        // Mostrar solo el nombre del producto en el ComboBox
+        comboProducto.setCellFactory(param -> new ListCell<Product>() {
+            @Override
+            protected void updateItem(Product item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null || item.getNombre() == null) {
+                    setText(null);
+                } else {
+                    setText(item.getNombre());
+                }
+            }
+        });
+
+
         spCantidad.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 100, 1, 1));
     }
 

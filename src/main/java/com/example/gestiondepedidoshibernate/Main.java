@@ -35,6 +35,7 @@ public class Main extends Application {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(ruta));
             Scene scene = new Scene(fxmlLoader.load(), 850, 600);
+            myStage.setResizable(false);
             myStage.setScene(scene);
         } catch (Exception e) {
             throw new RuntimeException(e);

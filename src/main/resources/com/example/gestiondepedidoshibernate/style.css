@@ -4,8 +4,20 @@
     -fx-background-position: center center;
 }
 
-.fondoVentaPpal{
+.fondoVentanaPpal{
     -fx-background-image: url("../images/fondo-ventana-principal.png");
+    -fx-background-size: cover;
+    -fx-background-position: center center;
+}
+
+.fondoVentanaDetalles{
+    -fx-background-image: url("../images/fondo-ventana-detalles.png");
+    -fx-background-size: cover;
+    -fx-background-position: center center;
+}
+
+.fondoVentanaPedido{
+    -fx-background-image: url("../images/fondo-ventana-pedido.png");
     -fx-background-size: cover;
     -fx-background-position: center center;
 }
