@@ -11,7 +11,11 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.view.JasperViewer;
 
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -39,6 +43,8 @@ public class OrderViewDetailsController implements Initializable {
     private Button btnEliminar;
     @javafx.fxml.FXML
     private Button btnVolver;
+    @javafx.fxml.FXML
+    private Button btnImprimir;
 
     private ItemDAOImp itemDAOImp = new ItemDAOImp();
     private ObservableList<Item> observableList;
@@ -139,5 +145,30 @@ public class OrderViewDetailsController implements Initializable {
     @javafx.fxml.FXML
     public void volver(ActionEvent actionEvent) {
         Main.loadWindow("ventana-principal.fxml");
+    }
+
+    @javafx.fxml.FXML
+    public void imprimir(ActionEvent actionEvent) {
+        try {
+            // Cargar el diseño del informe (.jrxml) en JasperReports
+            InputStream reportStream = getClass().getResourceAsStream("/ruta/a/tu/informe.jrxml");
+            JasperReport jasperReport = JasperCompileManager.compileReport(reportStream);
+
+            // Crear un JasperPrint con los datos
+            JasperPrint jasperPrint = JasperFillManager.fillReport(
+                    jasperReport,
+                    null,  // Parámetros (si los tienes)
+                    new JRBeanCollectionDataSource(observableList)  // DataSource
+            );
+
+            // Exportar a PDF o visualizar en una ventana, según sea necesario
+            JasperViewer.viewReport(jasperPrint, false);  // Visualizar en ventana
+            // O
+            JasperExportManager.exportReportToPdfFile(jasperPrint, "ruta/del/archivo.pdf");  // Exportar a PDF
+
+        } catch (JRException e) {
+            e.printStackTrace();
+            // Manejar la excepción según sea necesario
+        }
     }
 }

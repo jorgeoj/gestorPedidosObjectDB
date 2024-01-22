@@ -7,6 +7,7 @@ module com.example.gestiondepedidoshibernate {
     requires org.hibernate.orm.core;
     requires java.naming;
     requires java.sql;
+    requires jasperreports;
 
     opens com.example.gestiondepedidoshibernate.domain.user;
     opens com.example.gestiondepedidoshibernate.domain.orders;
