@@ -2,8 +2,10 @@ package com.example.gestiondepedidoshibernate.controllers;
 
 import com.example.gestiondepedidoshibernate.Main;
 import com.example.gestiondepedidoshibernate.Sesion;
+import com.example.gestiondepedidoshibernate.domain.HibernateUtil;
 import com.example.gestiondepedidoshibernate.domain.items.Item;
 import com.example.gestiondepedidoshibernate.domain.items.ItemDAOImp;
+import com.example.gestiondepedidoshibernate.domain.orders.Order;
 import com.example.gestiondepedidoshibernate.domain.orders.OrderDAOImp;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -13,10 +15,22 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
+import net.sf.jasperreports.export.SimplePdfExporterConfiguration;
 import net.sf.jasperreports.view.JasperViewer;
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import java.io.InputStream;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -148,27 +162,22 @@ public class OrderViewDetailsController implements Initializable {
     }
 
     @javafx.fxml.FXML
-    public void imprimir(ActionEvent actionEvent) {
-        try {
-            // Cargar el diseño del informe (.jrxml) en JasperReports
-            InputStream reportStream = getClass().getResourceAsStream("/ruta/a/tu/informe.jrxml");
-            JasperReport jasperReport = JasperCompileManager.compileReport(reportStream);
+    public void imprimir(ActionEvent actionEvent) throws SQLException, JRException {
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/gestionpedidos", "root", "");
+        HashMap<String, Object> hashMap = new HashMap<>();
 
-            // Crear un JasperPrint con los datos
-            JasperPrint jasperPrint = JasperFillManager.fillReport(
-                    jasperReport,
-                    null,  // Parámetros (si los tienes)
-                    new JRBeanCollectionDataSource(observableList)  // DataSource
-            );
+        hashMap.put("nombreEmpresa", "Pedidos CESUR S.L");
+        hashMap.put("pedido",Sesion.getCurrentOrder().getCodigo());
 
-            // Exportar a PDF o visualizar en una ventana, según sea necesario
-            JasperViewer.viewReport(jasperPrint, false);  // Visualizar en ventana
-            // O
-            JasperExportManager.exportReportToPdfFile(jasperPrint, "ruta/del/archivo.pdf");  // Exportar a PDF
+        JasperPrint jasperPrint = JasperFillManager.fillReport("gestor_pedido.jasper", hashMap, connection);
 
-        } catch (JRException e) {
-            e.printStackTrace();
-            // Manejar la excepción según sea necesario
-        }
+        // Mostrar el informe en una ventana
+        JasperViewer.viewReport(jasperPrint, false);
+
+        JRPdfExporter exp = new JRPdfExporter();
+        exp.setExporterInput(new SimpleExporterInput(jasperPrint));
+        exp.setExporterOutput(new SimpleOutputStreamExporterOutput("gestor_pedido.pdf"));
+        exp.setConfiguration(new SimplePdfExporterConfiguration());
+        exp.exportReport();
     }
 }
