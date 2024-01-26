@@ -2,7 +2,6 @@ package com.example.gestiondepedidoshibernate.domain.user;
 
 import org.hibernate.Session;
 import com.example.gestiondepedidoshibernate.domain.DAO;
-import com.example.gestiondepedidoshibernate.domain.HibernateUtil;
 import org.hibernate.query.Query;
 
 import java.util.ArrayList;

@@ -1,7 +1,6 @@
 package com.example.gestiondepedidoshibernate.domain.items;
 
 import com.example.gestiondepedidoshibernate.domain.DAO;
-import com.example.gestiondepedidoshibernate.domain.HibernateUtil;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.hibernate.Session;

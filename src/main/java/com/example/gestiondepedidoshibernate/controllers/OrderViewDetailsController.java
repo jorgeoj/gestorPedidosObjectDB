@@ -2,10 +2,8 @@ package com.example.gestiondepedidoshibernate.controllers;
 
 import com.example.gestiondepedidoshibernate.Main;
 import com.example.gestiondepedidoshibernate.Sesion;
-import com.example.gestiondepedidoshibernate.domain.HibernateUtil;
 import com.example.gestiondepedidoshibernate.domain.items.Item;
 import com.example.gestiondepedidoshibernate.domain.items.ItemDAOImp;
-import com.example.gestiondepedidoshibernate.domain.orders.Order;
 import com.example.gestiondepedidoshibernate.domain.orders.OrderDAOImp;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -14,23 +12,17 @@ import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import net.sf.jasperreports.engine.*;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 import net.sf.jasperreports.export.SimplePdfExporterConfiguration;
 import net.sf.jasperreports.view.JasperViewer;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
-import java.io.InputStream;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.ResourceBundle;
 
 /**
