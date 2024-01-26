@@ -1,10 +1,13 @@
 package com.example.gestiondepedidoshibernate.domain.items;
 
 import com.example.gestiondepedidoshibernate.domain.DAO;
+import com.example.gestiondepedidoshibernate.domain.ObjectDBUtil;
+import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
-import org.hibernate.Session;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 
 /**
@@ -14,72 +17,119 @@ public class ItemDAOImp implements DAO<Item> {
 
     /**
      * Obtiene todos los elementos Item.
+     *
      * @return Lista de todos los elementos Item almacenados.
      */
     @Override
     public ArrayList<Item> getAll() {
         var salida = new ArrayList<Item>(0);
-        try (Session sesion = HibernateUtil.getSessionFactory().openSession()) {
-            Query<Item> query = sesion.createQuery("from Item", Item.class);
+        EntityManager entityManager = ObjectDBUtil.getEntityManagerFactory().createEntityManager();
+        try{
+            TypedQuery<Item> query = entityManager.createQuery("select i from Item i", Item.class);
             salida = (ArrayList<Item>) query.getResultList();
+        } finally {
+            entityManager.close();
         }
         return salida;
     }
 
     /**
      * Obtiene un elemento Item por su ID.
+     *
      * @param id El ID del elemento Item a obtener.
      * @return El elemento Item correspondiente al ID especificado.
      */
     @Override
     public Item get(Long id) {
-        return null; // Implementar la lógica para obtener un elemento Item por ID
+        EntityManager em = ObjectDBUtil.getEntityManagerFactory().createEntityManager();
+        Item i;
+        try{
+            i = em.find(Item.class,id);
+        } finally {
+            em.close();
+        }
+        return i;
     }
 
     /**
      * Guarda un nuevo elemento Item.
+     *
      * @param data El elemento Item a guardar.
      * @return El elemento Item guardado.
      */
     @Override
     public Item save(Item data) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Transaction transaction = null;
-            try {
-                transaction = session.beginTransaction();
-
-                // Guardar el nuevo elemento Item en la base de datos
-                session.save(data);
-
-                transaction.commit();
-            } catch (Exception e) {
-                if (transaction != null) {
-                    transaction.rollback();
-                }
-                e.printStackTrace();
-            }
-            return data;
+        EntityManager em = ObjectDBUtil.getEntityManagerFactory().createEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.persist(data);
+            em.flush();
+            em.getTransaction().commit();
+        }finally {
+            em.close();
         }
+        return data;
     }
 
     /**
      * Actualiza un elemento Item existente.
+     *
      * @param data El elemento Item a actualizar.
      */
     @Override
-    public void update(Item data) {
-        // Implementar la lógica para actualizar un elemento Item
+    public Item update(Item data) {
+        EntityManager em = ObjectDBUtil.getEntityManagerFactory().createEntityManager();
+        try {
+            em.getTransaction().begin();
+            em.merge(data);
+            em.getTransaction().commit();
+
+        }catch (Exception ex){
+
+            System.out.println(ex.getMessage());
+        } finally {
+            em.close();
+        }
+        return data;
     }
 
     /**
      * Elimina un elemento Item existente.
+     *
      * @param data El elemento Item a eliminar.
      */
     @Override
-    public void delete(Item data) {
-        HibernateUtil.getSessionFactory().inTransaction(session -> {
-            Item item = session.get(Item.class, data.getId());
-            session.remove(item);
-        });
+    public Boolean delete(Item data) {
+        Boolean salida= false;
+        EntityManager em = ObjectDBUtil.getEntityManagerFactory().createEntityManager();
+        try {
+            em.getTransaction().begin();
+            Item i = em.find(Item.class,data.getId());
+            salida = (i!=null);
+            if(salida) {
+                em.remove(i);
+            }
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+        return salida;
     }
+
+    /*
+    public List<Item> getItemsByPedido(Long pedidoId) {
+        List<Item> items = new ArrayList<>();
+        EntityManager entityManager = ObjectDBUtil.getEntityManagerFactory().createEntityManager();
+
+        try {
+            TypedQuery<Item> query = entityManager.createQuery("SELECT i FROM Item i WHERE i.codigo.id = :codigo", Item.class);
+            query.setParameter("codigo", pedidoId);
+            items = query.getResultList();
+        } finally {
+            entityManager.close();
+        }
+
+        return items;
+    }
+    */
 }

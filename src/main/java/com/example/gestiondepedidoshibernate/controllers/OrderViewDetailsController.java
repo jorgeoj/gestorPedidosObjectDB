@@ -11,7 +11,9 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
@@ -159,7 +161,7 @@ public class OrderViewDetailsController implements Initializable {
         HashMap<String, Object> hashMap = new HashMap<>();
 
         hashMap.put("nombreEmpresa", "Pedidos CESUR S.L");
-        hashMap.put("pedido",Sesion.getCurrentOrder().getCodigo());
+        hashMap.put("pedido", Sesion.getCurrentOrder().getCodigo());
 
         JasperPrint jasperPrint = JasperFillManager.fillReport("gestor_pedido.jasper", hashMap, connection);
 

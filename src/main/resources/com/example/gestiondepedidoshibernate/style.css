@@ -1,22 +1,22 @@
-.fondo{
+.fondo {
     -fx-background-image: url("../images/fondo.png");
     -fx-background-size: cover;
     -fx-background-position: center center;
 }
 
-.fondoVentanaPpal{
+.fondoVentanaPpal {
     -fx-background-image: url("../images/fondo-ventana-principal.png");
     -fx-background-size: cover;
     -fx-background-position: center center;
 }
 
-.fondoVentanaDetalles{
+.fondoVentanaDetalles {
     -fx-background-image: url("../images/fondo-ventana-detalles.png");
     -fx-background-size: cover;
     -fx-background-position: center center;
 }
 
-.fondoVentanaPedido{
+.fondoVentanaPedido {
     -fx-background-image: url("../images/fondo-ventana-pedido.png");
     -fx-background-size: cover;
     -fx-background-position: center center;
@@ -38,7 +38,7 @@ Centrar el contenido de las celdas
 /*
 Centrar titulo de la columna y darle color
 */
-.table-view .column-header .label{
+.table-view .column-header .label {
     -fx-text-fill: #ffffff;
     -fx-alignment: CENTER;
     -fx-background-color: #0598ff;

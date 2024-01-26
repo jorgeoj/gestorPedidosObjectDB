@@ -52,7 +52,8 @@ public class MainViewController implements Initializable {
     /**
      * Constructor vacío de la clase.
      */
-    public MainViewController(){}
+    public MainViewController() {
+    }
 
     /**
      * Inicializa la vista principal.
@@ -61,11 +62,11 @@ public class MainViewController implements Initializable {
      * @param resourceBundle El ResourceBundle utilizado.
      */
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        colIdPedido.setCellValueFactory((fila)->{
+        colIdPedido.setCellValueFactory((fila) -> {
             String id = String.valueOf((fila.getValue().getId()));
             return new SimpleStringProperty(id);
         });
-        colFechaPedido.setCellValueFactory((fila)->{
+        colFechaPedido.setCellValueFactory((fila) -> {
             String fecha = String.valueOf((fila.getValue().getFecha()));
             return new SimpleStringProperty(fecha);
         });
@@ -86,11 +87,10 @@ public class MainViewController implements Initializable {
         Sesion.setCurrentUser((new UserDAOImp()).get(Sesion.getCurrentUser().getId()));
         cargarLista();
 
-        lblTitulo.setText("Bienvenido, " + Sesion.getCurrentUser().getNombre()+ " estos son tus pedidos");
+        lblTitulo.setText("Bienvenido, " + Sesion.getCurrentUser().getNombre() + " estos son tus pedidos");
         tvPedidos.getSelectionModel().selectedItemProperty().addListener((observableValue, pedido, t1) -> {
             Sesion.setCurrentOrder(t1);
         });
-
 
 
         tvPedidos.setOnMouseClicked(event -> {
@@ -130,10 +130,10 @@ public class MainViewController implements Initializable {
      */
     private Double calcularTotalPedido(Order order) {
         //Inicializa la variable total como 0.0 para almacenar el total del pedido.
-        Double total  = 0.0;
+        Double total = 0.0;
 
         //Itera a través de los items del pedido para calcular el total.
-        for (Item item : order.getItems()){
+        for (Item item : order.getItems()) {
 
             //Obtiene el precio del producto y lo multiplica por la cantidad, sumando al total.
             total += item.getProducto_id().getPrecio() * item.getCantidad();

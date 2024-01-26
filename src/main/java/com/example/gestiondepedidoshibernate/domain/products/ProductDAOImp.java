@@ -1,10 +1,14 @@
 package com.example.gestiondepedidoshibernate.domain.products;
 
 import com.example.gestiondepedidoshibernate.domain.DAO;
+import com.example.gestiondepedidoshibernate.domain.ObjectDBUtil;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Implementación concreta de DAO para la entidad Product.
@@ -13,20 +17,26 @@ public class ProductDAOImp implements DAO<Product> {
 
     /**
      * Obtiene todos los productos.
+     *
      * @return Lista de todos los productos almacenados.
      */
     @Override
-    public ArrayList<Product> getAll() {
-        var salida = new ArrayList<Product>(0);
-        try(Session sesion = HibernateUtil.getSessionFactory().openSession()){
-            Query<Product> query = sesion.createQuery("from Product ", Product.class);
-            salida = (ArrayList<Product>) query.getResultList();
+    public List<Product> getAll() {
+        List<Product> salida;
+
+        EntityManager em = ObjectDBUtil.getEntityManagerFactory().createEntityManager();
+        try{
+            TypedQuery<Product> query = em.createQuery("select p from Product p", Product.class);
+            salida = query.getResultList();
+        } finally {
+            em.close();
         }
         return salida;
     }
 
     /**
      * Obtiene un producto por su ID.
+     *
      * @param id El ID del producto a obtener.
      * @return El producto correspondiente al ID especificado.
      */
@@ -37,6 +47,7 @@ public class ProductDAOImp implements DAO<Product> {
 
     /**
      * Guarda un nuevo producto.
+     *
      * @param data El producto a guardar.
      * @return El producto guardado.
      */
@@ -47,6 +58,7 @@ public class ProductDAOImp implements DAO<Product> {
 
     /**
      * Actualiza un producto existente.
+     *
      * @param data El producto a actualizar.
      */
     @Override
@@ -56,6 +68,7 @@ public class ProductDAOImp implements DAO<Product> {
 
     /**
      * Elimina un producto existente.
+     *
      * @param data El producto a eliminar.
      */
     @Override

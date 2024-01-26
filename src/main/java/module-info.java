@@ -3,11 +3,11 @@ module com.example.gestiondepedidoshibernate {
     requires javafx.fxml;
 
     requires lombok;
-    requires jakarta.persistence;
     requires org.hibernate.orm.core;
     requires java.naming;
     requires java.sql;
     requires jasperreports;
+    requires javax.persistence;
 
     opens com.example.gestiondepedidoshibernate.domain.user;
     opens com.example.gestiondepedidoshibernate.domain.orders;

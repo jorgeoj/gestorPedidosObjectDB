@@ -2,7 +2,12 @@ package com.example.gestiondepedidoshibernate.domain.items;
 
 import com.example.gestiondepedidoshibernate.domain.orders.Order;
 import com.example.gestiondepedidoshibernate.domain.products.Product;
-import jakarta.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.JoinColumn;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -12,26 +17,26 @@ import java.io.Serializable;
  */
 @Data
 @Entity
-@Table(name = "item")
+
 public class Item implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Integer id;
 
     @ManyToOne
-    @JoinColumn(name = "codigo_pedido", referencedColumnName = "codigo")
+    @JoinColumn(name = "codigo_pedido", referencedColumnName = "codigo", nullable = false)
     private Order codigo_pedido;
 
     @OneToOne
     @JoinColumn(name = "producto_id")
     private Product producto_id;
 
-    @Column(name = "cantidad")
     private Integer cantidad;
 
     /**
      * Devuelve una representación en cadena del ítem.
+     *
      * @return Cadena que representa el ítem.
      */
     @Override

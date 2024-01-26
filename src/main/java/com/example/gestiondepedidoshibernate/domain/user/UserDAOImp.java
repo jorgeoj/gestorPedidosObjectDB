@@ -1,10 +1,14 @@
 package com.example.gestiondepedidoshibernate.domain.user;
 
-import org.hibernate.Session;
 import com.example.gestiondepedidoshibernate.domain.DAO;
+import com.example.gestiondepedidoshibernate.domain.ObjectDBUtil;
+import org.hibernate.Session;
 import org.hibernate.query.Query;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Implementación concreta de DAO para la entidad User.
@@ -13,34 +17,44 @@ public class UserDAOImp implements DAO<User> {
 
     /**
      * Obtiene todos los usuarios.
+     *
      * @return Lista de todos los usuarios almacenados.
      */
     @Override
-    public ArrayList<User> getAll() {
-        var salida = new ArrayList<User>(0);
-        try(Session sesion = HibernateUtil.getSessionFactory().openSession()){
-            Query<User> query = sesion.createQuery("from User", User.class);
-            salida = (ArrayList<User>) query.getResultList();
+    public List<User> getAll() {
+        List<User> salida;
+
+        EntityManager em = ObjectDBUtil.getEntityManagerFactory().createEntityManager();
+        try{
+            TypedQuery<User> query = em.createQuery("select u from User u", User.class);
+            salida =  query.getResultList();
+        } finally {
+            em.close();
         }
         return salida;
     }
 
     /**
      * Obtiene un usuario por su ID.
+     *
      * @param id El ID del usuario a obtener.
      * @return El usuario correspondiente al ID especificado.
      */
     @Override
     public User get(Long id) {
-        var salida = new User();
-        try(Session s = HibernateUtil.getSessionFactory().openSession()){
-            salida = s.get(User.class,id);
+        User salida = null;
+        EntityManager em = ObjectDBUtil.getEntityManagerFactory().createEntityManager();
+        try {
+            salida = em.find(User.class, id);
+        } finally {
+            em.close();
         }
         return salida;
     }
 
     /**
      * Guarda un nuevo usuario.
+     *
      * @param data El usuario a guardar.
      * @return El usuario guardado.
      */
@@ -51,6 +65,7 @@ public class UserDAOImp implements DAO<User> {
 
     /**
      * Actualiza un usuario existente.
+     *
      * @param data El usuario a actualizar.
      */
     @Override
@@ -60,6 +75,7 @@ public class UserDAOImp implements DAO<User> {
 
     /**
      * Elimina un usuario existente.
+     *
      * @param data El usuario a eliminar.
      */
     @Override
@@ -69,22 +85,31 @@ public class UserDAOImp implements DAO<User> {
 
     /**
      * Valida un usuario por su nombre de usuario y contraseña.
-     * @param username Nombre de usuario.
-     * @param password Contraseña del usuario.
+     *
+     * @param nombre Nombre de usuario.
+     * @param contraseña Contraseña del usuario.
      * @return El usuario validado o null si no se encuentra.
      */
-    public User validateUser(String username, String password){
+    public User validateUser(String nombre, String contraseña) {
         User result = null;
-        try(Session session = HibernateUtil.getSessionFactory().openSession()){
-            Query<User> query = session.createQuery("from User where nombre=:u and contrasenya=:p", User.class);
-            query.setParameter("u", username);
-            query.setParameter("p", password);
+        List<User> lista = new ArrayList<>();
+        EntityManager em = ObjectDBUtil.getEntityManagerFactory().createEntityManager();
+        try {
+
+            TypedQuery<User> query = em.createQuery("SELECT u FROM User u WHERE u.nombre = :u AND u.contraseña = :p", User.class);
+            query.setParameter("u", nombre);
+            query.setParameter("p", contraseña);
+            lista = query.getResultList();
             try {
-                result = query.getSingleResult();
-            } catch (Exception e){
-                System.out.println(e.getMessage());
+                result = lista.get(0);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
+
         return result;
     }
 }

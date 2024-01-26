@@ -4,13 +4,14 @@ import com.example.gestiondepedidoshibernate.Main;
 import com.example.gestiondepedidoshibernate.Sesion;
 import com.example.gestiondepedidoshibernate.domain.user.User;
 import com.example.gestiondepedidoshibernate.domain.user.UserDAOImp;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
-import javafx.event.ActionEvent;
-import javafx.scene.paint.Color;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
+import javafx.scene.control.TextField;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -35,7 +36,8 @@ public class LoginController implements Initializable {
      * @param resourceBundle El ResourceBundle utilizado.
      */
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {}
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+    }
 
     /**
      * Maneja el evento de inicio de sesión.

@@ -1,9 +1,13 @@
 package com.example.gestiondepedidoshibernate.domain.user;
 
 import com.example.gestiondepedidoshibernate.domain.orders.Order;
-import jakarta.persistence.*;
-import lombok.Data;
 
+import lombok.Data;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,22 +17,39 @@ import java.util.List;
  */
 @Data
 @Entity
-@Table(name = "usuario")
 public class User implements Serializable {
 
+    public User(String nombre, String contrasenya, String email, List<Order> pedidos) {
+        this.nombre = nombre;
+        this.contrasenya = contrasenya;
+        this.email = email;
+        this.pedidos = pedidos;
+    }
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
 
-    @Column(name = "nombre")
+
     private String nombre;
 
-    @Column(name = "contrasenya")
+
     private String contrasenya;
 
-    @Column(name = "email")
+
     private String email;
 
     @OneToMany(mappedBy = "usuarioId", fetch = FetchType.EAGER)
     private List<Order> pedidos = new ArrayList<>(0);
+
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "id=" + id +
+                ", nombre='" + nombre + '\'' +
+                ", contraseña='" + contrasenya + '\'' +
+                ", email='" + email + '\'' +
+                ", pedidos=" + pedidos +
+                '}';
+    }
 }

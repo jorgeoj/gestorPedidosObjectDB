@@ -15,26 +15,12 @@ public class Main extends Application {
     private static Stage myStage;
 
     /**
-     * Método que inicia la aplicación y carga la ventana de inicio de sesión.
-     * @param stage El escenario principal de la aplicación.
-     * @throws IOException Si hay un error al cargar la interfaz gráfica.
-     */
-    @Override
-    public void start(Stage stage) throws IOException {
-        myStage = stage;
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("ventana-login.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 700, 500);
-        stage.setTitle("Gestión de pedidos");
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    /**
      * Método estático que carga la ventana de inicio de sesión con la ruta especificada.
+     *
      * @param ruta La ruta del archivo FXML de la ventana de inicio de sesión.
      */
-    public static void loadLogin(String ruta){
-        try{
+    public static void loadLogin(String ruta) {
+        try {
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource(ruta));
             Scene scene = new Scene(fxmlLoader.load(), 700, 500);
             myStage.setScene(scene);
@@ -45,6 +31,7 @@ public class Main extends Application {
 
     /**
      * Método estático que carga una ventana con la ruta especificada.
+     *
      * @param ruta La ruta del archivo FXML de la ventana a cargar.
      */
     public static void loadWindow(String ruta) {
@@ -60,9 +47,26 @@ public class Main extends Application {
 
     /**
      * Método principal que inicia la aplicación.
+     *
      * @param args Los argumentos de la línea de comandos (no se utilizan en este caso).
      */
     public static void main(String[] args) {
         launch();
+    }
+
+    /**
+     * Método que inicia la aplicación y carga la ventana de inicio de sesión.
+     *
+     * @param stage El escenario principal de la aplicación.
+     * @throws IOException Si hay un error al cargar la interfaz gráfica.
+     */
+    @Override
+    public void start(Stage stage) throws IOException {
+        myStage = stage;
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("ventana-login.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 700, 500);
+        stage.setTitle("Gestión de pedidos");
+        stage.setScene(scene);
+        stage.show();
     }
 }

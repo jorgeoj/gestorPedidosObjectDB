@@ -1,10 +1,12 @@
 package com.example.gestiondepedidoshibernate.domain.orders;
 
 import com.example.gestiondepedidoshibernate.domain.DAO;
+import com.example.gestiondepedidoshibernate.domain.ObjectDBUtil;
 import org.hibernate.Session;
-import org.hibernate.query.Query;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
+import javax.persistence.EntityManager;
 import java.util.ArrayList;
 
 /**
@@ -14,91 +16,118 @@ public class OrderDAOImp implements DAO<Order> {
 
     /**
      * Obtiene todos los pedidos.
+     *
      * @return Lista de todos los pedidos almacenados.
      */
     @Override
     public ArrayList<Order> getAll() {
-        var salida = new ArrayList<Order>(0);
-        try(Session sesion = HibernateUtil.getSessionFactory().openSession()){
-            Query<Order> query = sesion.createQuery("from Order", Order.class);
-            salida = (ArrayList<Order>) query.getResultList();
-        }
-        return salida;
+        return null;
     }
 
     /**
      * Obtiene un pedido por su ID.
+     *
      * @param id El ID del pedido a obtener.
      * @return El pedido correspondiente al ID especificado.
      */
     @Override
     public Order get(Long id) {
-        var salida = new Order();
-        try(Session session = HibernateUtil.getSessionFactory().openSession()){
-            salida = session.get(Order.class, id);
+        EntityManager em = ObjectDBUtil.getEntityManagerFactory().createEntityManager();
+        Order o;
+        try{
+            o = em.find(Order.class,id);
+        } finally {
+            em.close();
         }
-        return salida;
+        return o;
     }
 
     /**
      * Guarda un nuevo pedido.
+     *
      * @param data El pedido a guardar.
      * @return El pedido guardado.
      */
     @Override
     public Order save(Order data) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Transaction transaction = null;
-            try {
-                transaction = session.beginTransaction();
-
-                // Guardar el nuevo pedido en la base de datos
-                session.save(data);
-
-                transaction.commit();
-            } catch (Exception e) {
-                if (transaction != null) {
-                    transaction.rollback();
-                }
-                e.printStackTrace();
-            }
-            return data;
+        EntityManager em = ObjectDBUtil.getEntityManagerFactory().createEntityManager();
+        try{
+            em.getTransaction().begin();
+            em.persist(data);
+            em.flush();
+            em.getTransaction().commit();
+        } finally {
+            em.close();
         }
+        return data;
     }
 
     /**
      * Actualiza un pedido existente.
+     *
      * @param data El pedido a actualizar.
      */
     @Override
-    public void update(Order data) {
-        try (Session session = HibernateUtil.getSessionFactory().openSession()) {
-            Transaction transaction = null;
-            try {
-                transaction = session.beginTransaction();
+    public Order update(Order data) {
+        EntityManager em = ObjectDBUtil.getEntityManagerFactory().createEntityManager();
+        try {
+            em.getTransaction().begin();
+            data = em.merge(data);
+            em.getTransaction().commit();
 
-                // Actualizar el pedido en la base de datos
-                session.update(data);
+        }catch (Exception ex){
 
-                transaction.commit();
-            } catch (Exception e) {
-                if (transaction != null) {
-                    transaction.rollback();
-                }
-                e.printStackTrace();
-            }
+            System.out.println(ex.getMessage());
+        } finally {
+            em.close();
         }
+        return data;
     }
 
     /**
      * Elimina un pedido existente.
+     *
      * @param data El pedido a eliminar.
      */
     @Override
-    public void delete(Order data) {
-        HibernateUtil.getSessionFactory().inTransaction((session -> {
-            Order o = session.get(Order.class, data.getId());
-            session.remove(o);
-        }));
+    public Boolean delete(Order data) {
+        Boolean salida= false;
+        EntityManager em = ObjectDBUtil.getEntityManagerFactory().createEntityManager();
+        try {
+            em.getTransaction().begin();
+            Order o = em.find(Order.class,data.getId());
+            salida = (o != null);
+            if(salida) {
+                em.remove(o);
+            }
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+        return salida;
     }
+
+    /*
+    public String getUltimoCodigo() {
+        EntityManager em = ObjectDBUtil.getEntityManagerFactory().createEntityManager();
+
+        TypedQuery<String> query = em.createQuery("select max(p.código) from Pedido p", String.class);
+        return query.getSingleResult();
+    }
+
+
+    public double calcularTotalPedido(List<Item> items) {
+        double totalPedido = 0.0;
+        for (Item item : items) {
+            if (item != null && item.getProducto() != null) {
+                String precioConEuro = item.getProducto().getPrecio();
+                String precioSinEuro = precioConEuro.replace("€", "");
+                double precio = Double.parseDouble(precioSinEuro);
+                totalPedido += item.getCantidad() * precio;
+            }
+        }
+        return totalPedido;
+    }
+    */
+
 }
