@@ -63,14 +63,28 @@ public class UserDAOImp implements DAO<User> {
         return null; // No hace nada
     }
 
+    public void saveAll(List<User> usuarios) {
+        EntityManager em = ObjectDBUtil.getEntityManagerFactory().createEntityManager();
+        try{
+            em.getTransaction().begin();
+            for(User u : usuarios){
+                em.persist(u);
+            }
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+    }
+
+
     /**
      * Actualiza un usuario existente.
      *
      * @param data El usuario a actualizar.
      */
     @Override
-    public void update(User data) {
-        // No hace nada
+    public User update(User data) {
+        return null;
     }
 
     /**
@@ -79,8 +93,8 @@ public class UserDAOImp implements DAO<User> {
      * @param data El usuario a eliminar.
      */
     @Override
-    public void delete(User data) {
-        // No hace nada
+    public Boolean delete(User data) {
+        return null;
     }
 
     /**
@@ -96,7 +110,7 @@ public class UserDAOImp implements DAO<User> {
         EntityManager em = ObjectDBUtil.getEntityManagerFactory().createEntityManager();
         try {
 
-            TypedQuery<User> query = em.createQuery("SELECT u FROM User u WHERE u.nombre = :u AND u.contraseña = :p", User.class);
+            TypedQuery<User> query = em.createQuery("SELECT u FROM User u WHERE u.nombre = :u AND u.contrasenya = :p", User.class);
             query.setParameter("u", nombre);
             query.setParameter("p", contraseña);
             lista = query.getResultList();

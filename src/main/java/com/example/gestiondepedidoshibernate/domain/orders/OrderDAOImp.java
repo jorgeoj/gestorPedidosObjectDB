@@ -7,6 +7,7 @@ import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 
 /**
@@ -107,27 +108,10 @@ public class OrderDAOImp implements DAO<Order> {
         return salida;
     }
 
-    /*
     public String getUltimoCodigo() {
         EntityManager em = ObjectDBUtil.getEntityManagerFactory().createEntityManager();
 
-        TypedQuery<String> query = em.createQuery("select max(p.código) from Pedido p", String.class);
+        TypedQuery<String> query = em.createQuery("select max(p.codigo) from Order p", String.class);
         return query.getSingleResult();
     }
-
-
-    public double calcularTotalPedido(List<Item> items) {
-        double totalPedido = 0.0;
-        for (Item item : items) {
-            if (item != null && item.getProducto() != null) {
-                String precioConEuro = item.getProducto().getPrecio();
-                String precioSinEuro = precioConEuro.replace("€", "");
-                double precio = Double.parseDouble(precioSinEuro);
-                totalPedido += item.getCantidad() * precio;
-            }
-        }
-        return totalPedido;
-    }
-    */
-
 }

@@ -2,9 +2,11 @@ package com.example.gestiondepedidoshibernate.controllers;
 
 import com.example.gestiondepedidoshibernate.Main;
 import com.example.gestiondepedidoshibernate.Sesion;
+import com.example.gestiondepedidoshibernate.domain.ObjectDBUtil;
 import com.example.gestiondepedidoshibernate.domain.items.Item;
 import com.example.gestiondepedidoshibernate.domain.orders.Order;
 import com.example.gestiondepedidoshibernate.domain.orders.OrderDAOImp;
+import com.example.gestiondepedidoshibernate.domain.user.User;
 import com.example.gestiondepedidoshibernate.domain.user.UserDAOImp;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -15,7 +17,10 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
+import org.w3c.dom.Entity;
 
+import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -134,7 +139,6 @@ public class MainViewController implements Initializable {
 
         //Itera a través de los items del pedido para calcular el total.
         for (Item item : order.getItems()) {
-
             //Obtiene el precio del producto y lo multiplica por la cantidad, sumando al total.
             total += item.getProducto_id().getPrecio() * item.getCantidad();
         }
@@ -161,21 +165,20 @@ public class MainViewController implements Initializable {
     @javafx.fxml.FXML
     public void anyadirPedido(ActionEvent actionEvent) {
         Order newOrder = new Order();
-
-        try (Session sesion = HibernateUtil.getSessionFactory().openSession()) {
-            // Obtener el último código de pedido
-            Query<String> query = sesion.createQuery("select max(o.codigo) from Order o", String.class);
-            String ultimoCodigoPedido = query.uniqueResult();
-
+        EntityManager em = ObjectDBUtil.getEntityManagerFactory().createEntityManager();
+        OrderDAOImp pedidoDAO = new OrderDAOImp();
+        String ultimoCodigo = pedidoDAO.getUltimoCodigo();
+        if(ultimoCodigo !=null)  {
             // Incrementar el último código de pedido
-            int ultimoNumero = Integer.parseInt(ultimoCodigoPedido.substring(4));
+            int ultimoNumero = Integer.parseInt(ultimoCodigo.substring(4));
             int nuevoNumero = ultimoNumero + 1;
             String nuevoCodigoPedido = "PED-" + String.format("%03d", nuevoNumero);
 
             // Establecer el nuevo código de pedido en el pedido
             newOrder.setCodigo(nuevoCodigoPedido);
-        } catch (Exception e) {
-            e.printStackTrace();
+        } else {
+            newOrder.setCodigo("PED-001");
+            System.out.println("codigo nulo");
         }
 
         // Establecer la fecha actual por defecto

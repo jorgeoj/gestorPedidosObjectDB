@@ -62,8 +62,8 @@ public class ProductDAOImp implements DAO<Product> {
      * @param data El producto a actualizar.
      */
     @Override
-    public void update(Product data) {
-        // No hace nada
+    public Product update(Product data) {
+        return null;
     }
 
     /**
@@ -72,7 +72,20 @@ public class ProductDAOImp implements DAO<Product> {
      * @param data El producto a eliminar.
      */
     @Override
-    public void delete(Product data) {
-        // No hace nada
+    public Boolean delete(Product data) {
+        return null;
+    }
+
+    public void saveAll(List<Product> productos) {
+        EntityManager em = ObjectDBUtil.getEntityManagerFactory().createEntityManager();
+        try{
+            em.getTransaction().begin();
+            for(Product p : productos){
+                em.persist(p);
+            }
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
     }
 }

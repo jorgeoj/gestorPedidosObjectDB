@@ -1,11 +1,16 @@
 package com.example.gestiondepedidoshibernate;
 
+import com.example.gestiondepedidoshibernate.domain.products.Product;
+import com.example.gestiondepedidoshibernate.domain.products.ProductDAOImp;
+import com.example.gestiondepedidoshibernate.domain.user.User;
+import com.example.gestiondepedidoshibernate.domain.user.UserDAOImp;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Clase principal que inicia la aplicación de gestión de pedidos.
@@ -62,6 +67,26 @@ public class Main extends Application {
      */
     @Override
     public void start(Stage stage) throws IOException {
+
+        try{
+            ProductDAOImp productoDAO = new ProductDAOImp();
+            List<Product> productos=productoDAO.getAll();
+            if (productos.isEmpty()){
+                productos=Data.generarProductos();
+                productoDAO.saveAll(productos);
+            }
+
+            UserDAOImp usuarioDAO = new UserDAOImp();
+            List<User> usuarios=usuarioDAO.getAll();
+            if (usuarios.isEmpty()){
+                usuarios=Data.generarUsuarios();
+                usuarioDAO.saveAll(usuarios);
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
         myStage = stage;
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("ventana-login.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 700, 500);
