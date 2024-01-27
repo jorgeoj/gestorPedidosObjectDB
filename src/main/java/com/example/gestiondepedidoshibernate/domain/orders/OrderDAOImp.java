@@ -108,10 +108,22 @@ public class OrderDAOImp implements DAO<Order> {
         return salida;
     }
 
+    /**
+     * Método que devuelve el último código de orden almacenado en la base de datos.
+     * Utiliza JPA (Java Persistence API) para ejecutar una consulta que selecciona
+     * el valor máximo del campo 'codigo' en la entidad 'Order'.
+     *
+     * @return El último código de orden como una cadena de texto.
+     */
     public String getUltimoCodigo() {
+        // Se obtiene una instancia del EntityManager.
         EntityManager em = ObjectDBUtil.getEntityManagerFactory().createEntityManager();
 
+        // Se crea una consulta JPA para obtener el máximo valor del campo 'codigo' en la entidad 'Order'.
         TypedQuery<String> query = em.createQuery("select max(p.codigo) from Order p", String.class);
+
+        // Se ejecuta la consulta y se devuelve el resultado, que es el último código de orden.
         return query.getSingleResult();
     }
+
 }

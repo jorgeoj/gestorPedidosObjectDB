@@ -100,7 +100,7 @@ public class ItemDAOImp implements DAO<Item> {
      */
     @Override
     public Boolean delete(Item data) {
-        Boolean salida= false;
+        Boolean salida;
         EntityManager em = ObjectDBUtil.getEntityManagerFactory().createEntityManager();
         try {
             em.getTransaction().begin();
@@ -115,21 +115,4 @@ public class ItemDAOImp implements DAO<Item> {
         }
         return salida;
     }
-
-    /*
-    public List<Item> getItemsByPedido(Long pedidoId) {
-        List<Item> items = new ArrayList<>();
-        EntityManager entityManager = ObjectDBUtil.getEntityManagerFactory().createEntityManager();
-
-        try {
-            TypedQuery<Item> query = entityManager.createQuery("SELECT i FROM Item i WHERE i.codigo.id = :codigo", Item.class);
-            query.setParameter("codigo", pedidoId);
-            items = query.getResultList();
-        } finally {
-            entityManager.close();
-        }
-
-        return items;
-    }
-    */
 }

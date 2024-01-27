@@ -40,7 +40,7 @@ public class User implements Serializable {
     private String email;
 
     @OneToMany(mappedBy = "usuarioId", fetch = FetchType.EAGER)
-    private List<Order> pedidos = new ArrayList<>(0);
+    private List<Order> pedidos;
 
     @Override
     public String toString() {

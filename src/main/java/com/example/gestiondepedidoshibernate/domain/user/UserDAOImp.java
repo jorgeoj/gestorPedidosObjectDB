@@ -63,18 +63,34 @@ public class UserDAOImp implements DAO<User> {
         return null; // No hace nada
     }
 
+    /**
+     * Guarda una lista de usuarios en la base de datos.
+     * Utiliza JPA (Java Persistence API) para realizar la operación de persistencia.
+     *
+     * @param usuarios La lista de usuarios que se va a guardar en la base de datos.
+     * @throws javax.persistence.PersistenceException Si ocurre un error durante la operación de persistencia.
+     */
     public void saveAll(List<User> usuarios) {
+        // Se obtiene una instancia del EntityManager.
         EntityManager em = ObjectDBUtil.getEntityManagerFactory().createEntityManager();
-        try{
+
+        try {
+            // Se inicia una transacción antes de realizar la operación de persistencia.
             em.getTransaction().begin();
-            for(User u : usuarios){
+
+            // Se itera sobre la lista de usuarios y se guarda cada uno en la base de datos.
+            for (User u : usuarios) {
                 em.persist(u);
             }
+
+            // Se realiza un commit para confirmar la transacción.
             em.getTransaction().commit();
         } finally {
+            // Se asegura de cerrar el EntityManager, independientemente de si la transacción fue exitosa o no.
             em.close();
         }
     }
+
 
 
     /**
